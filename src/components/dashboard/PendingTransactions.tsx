@@ -142,7 +142,7 @@ const PendingTransactions = ({
                     </Button>
                     <Button
                       size="sm"
-                      className="bg-[#1C61A1] hover:bg-[#20476E]"
+                      className="text-[#ffffff] bg-[#1C61A1] hover:bg-[#20476E]"
                       onClick={() => onApprove(transaction.id)}
                     >
                       Approve

@@ -14,6 +14,7 @@ import {
   Settings,
   Menu,
   X,
+  Sun,
 } from "lucide-react";
 import {
   Tooltip,
@@ -76,13 +77,18 @@ const TopNavigation = () => {
   const navItems = [
     {
       icon: <Home size={18} />,
-      label: "Financial Summary",
+      label: "Dashboard",
       path: "/",
+    },
+    {
+      icon: <DollarSign size={18} />,
+      label: "Financial Summary",
+      path: "/financial-summary",
     },
     {
       icon: <BarChart3 size={18} />,
       label: "Sales Performance",
-      path: "/sales",
+      path: "/sales-performance",
     },
     {
       icon: <ShoppingCart size={18} />,
@@ -109,7 +115,6 @@ const TopNavigation = () => {
           <div className="flex items-center justify-between w-full md:w-auto">
             <div className="flex items-center gap-2">
               <img src={qasaLogo} alt="Custom Logo" className="h-6 w-6" />
-              {/*<DollarSign size={24} className="text-[#0078D7]" />*/}
               <h1 className="text-xl font-bold text-[#20476E] font-sans">
                 qASA
               </h1>
@@ -167,11 +172,7 @@ const TopNavigation = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
+                  <Sun className="mr-2 h-4 w-4" />
                   <span>Theme</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

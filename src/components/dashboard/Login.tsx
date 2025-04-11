@@ -32,7 +32,7 @@ const dummyUsers = [
       
       // API Login (commented out for now)
       /*try {
-        const response = await fetch("http://26.237.27.38/testapi/api/token", {
+        const response = await fetch("https://dummyjson.com/c/4a21-c93a-4d5f-9f43", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
@@ -43,7 +43,7 @@ const dummyUsers = [
         if (response.ok && data.success) {
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("token", data.token);
-          localStorage.setItem("studentId", data.user.username);
+          localStorage.setItem("username", data.user.username);
           navigate("/");
         } else {
           setError("Invalid credentials. Please try again.");

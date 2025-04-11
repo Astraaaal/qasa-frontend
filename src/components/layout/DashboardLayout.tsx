@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import TopNavigation from "./TopNavigation";
-import FinancialSummary from "../dashboard/FinancialSummary";
 import { Button } from "../ui/button";
 
 interface DashboardLayoutProps {
@@ -25,7 +24,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
           </div>
           <div className="flex items-center gap-4">
             <div className="bg-[#F0F0F0] px-3 py-1 rounded-md text-sm text-[#20476E]">
-              <span>Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span>Last updated: {new Date().toLocaleDateString()}</span>
             </div>
             {/*<Button
               variant="outline"
@@ -38,7 +37,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
 
         {/* Content Area */}
         <main className="flex-1 overflow-auto bg-[#F0F0F0]">
-          {children || <Outlet /> || <FinancialSummary />}
+          {children || <Outlet />}
         </main>
 
         {/* Footer */}
