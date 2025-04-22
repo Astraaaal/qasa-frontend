@@ -1,52 +1,40 @@
-import React from "react";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FinancialSummary from "./dashboard/FinancialSummary";
 import DashboardLayout from "./layout/DashboardLayout";
 import SalesPerformance from "./dashboard/SalesPerformance";
 import Procurement from "./dashboard/Procurement";
 import Inventory from "./dashboard/Inventory";
 import CashFlow from "./dashboard/CashFlow";
-import Account from "./dashboard/Account";
 
 const Home = () => {
+  const [activeTab, setActiveTab] = useState("financial-summary");
+
   return (
     <DashboardLayout>
-      <Tabs>
-        <TabsContent
-          value="financial-summary"
-          className="w-full h-full p-0 m-0"
-        >
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="">
+        <TabsList>
+          <TabsTrigger value="financial-summary"></TabsTrigger>
+          <TabsTrigger value="sales-performance"></TabsTrigger>
+          <TabsTrigger value="procurement"></TabsTrigger>
+          <TabsTrigger value="inventory"></TabsTrigger>
+          <TabsTrigger value="cash-flow"></TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="financial-summary" className="">
           <FinancialSummary />
         </TabsContent>
-        <TabsContent
-          value="sales-performance"
-          className="w-full h-full p-0 m-0"
-        >
+        <TabsContent value="sales-performance" className="">
           <SalesPerformance />
         </TabsContent>
-        <TabsContent
-          value="procurement"
-          className="w-full h-full p-0 m-0"
-        >
+        <TabsContent value="procurement" className="">
           <Procurement />
         </TabsContent>
-        <TabsContent
-          value="inventory"
-          className="w-full h-full p-0 m-0"
-        >
+        <TabsContent value="inventory" className="">
           <Inventory />
         </TabsContent>
-        <TabsContent
-          value="cash-flow"
-          className="w-full h-full p-0 m-0"
-        >
+        <TabsContent value="cash-flow" className="">
           <CashFlow />
-        </TabsContent>
-        <TabsContent
-          value="account"
-          className="w-full h-full p-0 m-0"
-        >
-          <Account />
         </TabsContent>
       </Tabs>
     </DashboardLayout>

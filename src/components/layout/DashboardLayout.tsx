@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import TopNavigation from "./TopNavigation";
 import { Button } from "../ui/button";
+import RefreshButton from "../dashboard/RefreshButton";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -22,16 +23,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
               Dashboard
             </h1>
           </div>
+
           <div className="flex items-center gap-4">
+            <RefreshButton/>
             <div className="bg-[#F0F0F0] px-3 py-1 rounded-md text-sm text-[#20476E]">
               <span>Last updated: {new Date().toLocaleDateString()}</span>
             </div>
-            {/*<Button
-              variant="outline"
-              className="border-[#0078D7] text-[#0078D7] hover:bg-[#F0F0F0] hover:text-[#0078D7]"
-            >
-              Refresh Data
-            </Button>*/}
           </div>
         </header>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   BarChart3,
@@ -15,6 +15,8 @@ import {
   Menu,
   X,
   Sun,
+  SunMoon,
+  Moon,
 } from "lucide-react";
 import {
   Tooltip,
@@ -22,7 +24,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -34,6 +35,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import qasaLogo from '../assets/qASA-logo.png';
+import { ThemeContext } from "../../context/ThemeContext";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -73,6 +75,7 @@ const TopNavigation = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const navItems = [
     {
@@ -144,13 +147,13 @@ const TopNavigation = () => {
 
           {/* User Profile Dropdown */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button
+            {/*<Button
               variant="ghost"
               size="icon"
               className="text-gray-600 h-9 w-9"
             >
               <HelpCircle className="h-4 w-4" />
-            </Button>
+            </Button>*/}
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -158,27 +161,49 @@ const TopNavigation = () => {
                   variant="ghost"
                   className="flex items-center gap-2 px-2"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=finance" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
                   <span className="text-sm font-medium text-gray-700">
                     Michael Angelo Gonzales
                   </span>
                   <ChevronDown className="h-4 w-4 text-gray-500" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className="w-56 !bg-white !backdrop-blur-none shadow-md border border-gray-200">
+                <DropdownMenuLabel>Settings</DropdownMenuLabel>
+
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Sun className="mr-2 h-4 w-4" />
-                  <span>Theme</span>
+
+                <DropdownMenuItem /*asChild*/>
+                <button
+                  onClick={() => console.log('Toggle Help')} // replace with your help toggle function
+                  className="flex items-center w-full text-left hover:text-[#0078D7]"
+                >
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span>Help</span>
+                </button>
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+
+                <DropdownMenuItem /*asChild*/>
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center w-full text-left hover:text-[#0078D7]"
+                >
+                  {theme === "dark" ? <Sun className="mr-2 h-4 w-4"/> : <Moon className="mr-2 h-4 w-4"/>}
+                  <span>Theme</span>
+                </button>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem /*asChild*/>
+                  <button
+                    onClick={() => console.log('Logging out')}
+                    className="flex items-center w-full text-left hover:text-[#FF0000]"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -205,27 +230,9 @@ const TopNavigation = () => {
                   <span className="font-sans text-sm">{item.label}</span>
                 </Link>
               ))}
-              <Link
-                to="/account"
-                className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-md transition-colors",
-                  currentPath === "/account"
-                    ? "bg-[#1C61A1] text-white"
-                    : "text-[#20476E] hover:bg-[#F0F0F0]",
-                )}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <div className="w-5 h-5">
-                  <User size={18} />
-                </div>
-                <span className="font-sans text-sm">Account</span>
-              </Link>
+
               <div className="flex items-center justify-between px-3 py-2 mt-2 border-t border-[#DCDCDC]">
                 <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=finance" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
                   <span className="text-sm font-medium text-gray-700">
                     Michael Angelo Gonzales
                   </span>
@@ -250,12 +257,6 @@ const TopNavigation = () => {
                 isActive={currentPath === item.path}
               />
             ))}
-            <NavItem
-              icon={<User size={18} />}
-              label="Account"
-              path="/account"
-              isActive={currentPath === "/account"}
-            />
           </div>
         </div>
       </div>

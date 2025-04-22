@@ -3,7 +3,7 @@ import KpiCards from "./KpiCards";
 import PendingTransactions from "./PendingTransactions";
 import ExpensesBreakdown from "./ExpensesBreakdown";
 import RevenueExpensesTrend from "./RevenueExpensesTrend";
-import ActionButtons from "./ActionButtons";
+import ActionButtons from "./RefreshButton";
 
 interface FinancialSummaryProps {
   title?: string;
@@ -26,10 +26,10 @@ const FinancialSummary = ({
         <KpiCards />
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Buttons
       <div className="mb-6">
         <ActionButtons />
-      </div>
+      </div>*/}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
