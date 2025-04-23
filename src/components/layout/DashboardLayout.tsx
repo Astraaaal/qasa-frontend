@@ -34,7 +34,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
 
         {/* Content Area */}
         <main className="flex-1 overflow-auto bg-[#F0F0F0]">
-          {children || <Outlet />}
+          {children}
         </main>
 
         {/* Footer */}
