@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import TopNavigation from "./TopNavigation";
 import { Button } from "../ui/button";
-import RefreshButton from "../dashboard/RefreshButton";
+import RefreshButton from "../dashboard/common/RefreshButton";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;

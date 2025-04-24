@@ -1,9 +1,9 @@
 import React from "react";
-import KpiCards from "../dashboard/KpiCards";
-import PendingTransactions from "../dashboard/PendingTransactions";
-import ExpensesBreakdown from "../dashboard/ExpensesBreakdown";
-import RevenueExpensesTrend from "../dashboard/RevenueExpensesTrend";
-import ActionButtons from "../dashboard/RefreshButton";
+import KpiCards from "../dashboard/financialSummary/KpiCards";
+import PendingTransactions from "../dashboard/financialSummary/PendingTransactions";
+import ExpensesBreakdown from "../dashboard/financialSummary/ExpensesBreakdown";
+import RevenueExpensesTrend from "../dashboard/financialSummary/RevenueExpensesTrend";
+import ActionButtons from "../dashboard/common/RefreshButton";
 
 interface FinancialSummaryProps {
   title?: string;

@@ -1,11 +1,4 @@
 import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import FinancialSummary from "./FinancialSummary";
-import DashboardLayout from "../layout/DashboardLayout";
-import SalesPerformance from "./SalesPerformance";
-import Procurement from "./Procurement";
-import Inventory from "./Inventory";
-import CashFlow from "./CashFlow";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("financial-summary");

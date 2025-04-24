@@ -1,4 +1,14 @@
-import React from "react";
+import React from 'react';
+import MetricsSection from '../dashboard/salesPerformance/KpiSection';
+import ChartsSection from '../dashboard/salesPerformance/ChartSection';
+import TopSellingProductsTable from '../dashboard/salesPerformance/TopSellingProductsTable';
+import PendingSalesTable from '../dashboard/salesPerformance/PendingSalesTable';
+import { 
+  monthlySalesData, 
+  productSalesData, 
+  topSellingProducts, 
+  pendingSalesOrders 
+} from '../data/SalesPerformance';
 
 interface SalesPerformanceProps {
     title?: string;
@@ -16,23 +26,14 @@ const SalesPerformance = ({
         <p className="text-sm text-gray-600">{subtitle}</p>
       </div>
 
-      {/* Placeholder Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-3">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-xl font-semibold text-[#20476E] mb-4">
-              Sales Performance Module
-            </h2>
-            <p className="text-gray-600 mb-4">
-              This module is under development. Check back soon for updates.
-            </p>
-            <div className="h-64 flex items-center justify-center border border-dashed border-gray-300 rounded-md">
-              <p className="text-gray-500">
-                Sales charts and metrics will appear here
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="container mx-auto px-6 py-6">
+        <MetricsSection />
+        <ChartsSection 
+          monthlySalesData={monthlySalesData}
+          productSalesData={productSalesData}
+        />
+        <TopSellingProductsTable products={topSellingProducts} />
+        <PendingSalesTable orders={pendingSalesOrders} />
       </div>
     </div>
   );

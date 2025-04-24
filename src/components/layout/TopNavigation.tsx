@@ -108,6 +108,16 @@ const TopNavigation = () => {
       label: "Cash Flow",
       path: "/cash-flow",
     },
+    {
+      icon: <DollarSign size={18} />,
+      label: "Test Financial",
+      path: "/test-financial",
+    },
+    {
+      icon: <ShoppingCart size={18} />,
+      label: "Test Procurement",
+      path: "/procurementt",
+    }
   ];
 
   return (

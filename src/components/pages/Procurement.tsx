@@ -1,4 +1,6 @@
-import React from "react";
+import { useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AlertCircle, CheckCircle, FileText, DollarSign, Users, ChevronRight, XCircle, X, Search } from 'lucide-react';
 
 const Procurement = () => {
   return (

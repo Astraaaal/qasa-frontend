@@ -9,11 +9,12 @@ function App() {
   const isLoggedIn = localStorage.getItem("loggedIn") === "true";
 
   const FinancialSummary = lazy(() => import("./components/pages/FinancialSummary"));
+  const TestFinancial = lazy(() => import("./components/pages/testFinancial"));
   const SalesPerformance = lazy(() => import("./components/pages/SalesPerformance"));
   const Procurement = lazy(() => import("./components/pages/Procurement"));
   const Inventory = lazy(() => import("./components/pages/Inventory"));
   const CashFlow = lazy(() => import("./components/pages/CashFlow"));
-  const Account = lazy(() => import("./components/dashboard/Account"));
+  const Procurements = lazy(() => import("./components/pages/procurementt"));
   
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -26,7 +27,8 @@ function App() {
             <Route path="/procurement" element={<Procurement />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/cash-flow" element={<CashFlow />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/test-financial" element={<TestFinancial />} />
+            <Route path="/procurementt" element={<Procurements />} />
             {/*<Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Navigate to="/" replace />} />*/}

@@ -1,21 +1,8 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react";
-
-interface KpiCardProps {
-  title: string;
-  value: string;
-  change?: {
-    value: string;
-    type: "increase" | "decrease";
-    percentage: string;
-  };
-  period?: string;
-  icon?: React.ReactNode;
-  status?: "green" | "yellow" | "red";
-  description?: string;
-}
+import { FinancialSummaryKpiCardsProps } from "../../types/FinancialSummaryKpiCards";
 
 const KpiCard = ({
   title = "Revenue",
@@ -25,7 +12,7 @@ const KpiCard = ({
   icon = <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
   status = "green",
   description = "Monthly target",
-}: KpiCardProps) => {
+}: FinancialSummaryKpiCardsProps) => {
   const statusColors = {
     green: "bg-green-100 text-green-800 border-green-200",
     yellow: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -35,10 +22,11 @@ const KpiCard = ({
   return (
     <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-bold text-gray-700">
-          {title}
-        </CardTitle>
-        <span className="text-xs font-medium text-gray-500">{period}</span>
+        <div className="flex items-center space-x-2">
+          {icon}
+          <CardTitle className="text-sm font-bold text-foreground">{title}</CardTitle>
+        </div>
+        <span className="text-xs font-medium text-muted-foreground">{period}</span>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col space-y-2">
@@ -50,12 +38,19 @@ const KpiCard = ({
                   "ml-2 rounded-full px-2 py-0.5 text-xs font-medium border",
                   statusColors[status],
                 )}
+                aria-label={
+                  status === "green"
+                    ? "Low Risk"
+                    : status === "yellow"
+                    ? "Moderate Risk"
+                    : "High Risk"
+                }
               >
                 {status === "green"
                   ? "Low Risk"
                   : status === "yellow"
-                    ? "Moderate Risk"
-                    : "High Risk"}
+                  ? "Moderate Risk"
+                  : "High Risk"}
               </span>
             )}
           </div>
@@ -68,27 +63,26 @@ const KpiCard = ({
                 <ArrowDownIcon className="h-4 w-4 text-red-500" />
               )}
               <span
-                className={`text-xs font-medium ${change.type === "increase" ? "text-green-500" : "text-red-500"}`}
+                className={`text-xs font-medium ${
+                  change.type === "increase" ? "text-green-500" : "text-red-500"
+                }`}
               >
                 {change.value} ({change.percentage})
               </span>
             </div>
           )}
 
-          <p className="text-xs text-gray-500">{description}</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         </div>
       </CardContent>
     </Card>
   );
 };
 
-interface KpiCardsProps {
-  cards?: KpiCardProps[];
-}
-
-const KpiCards = ({ cards }: KpiCardsProps) => {
-  const defaultCards: KpiCardProps[] = [
+const KpiCards = ({ cards }: FinancialSummaryKpiCardsProps) => {
+  const defaultCards: FinancialSummaryKpiCardsProps[] = [
     {
+      id: "1",
       title: "Revenue",
       value: "₱124,780",
       change: { value: "₱12,430", type: "increase", percentage: "12%" },
@@ -97,6 +91,7 @@ const KpiCards = ({ cards }: KpiCardsProps) => {
       description: "Monthly target: ₱150,000",
     },
     {
+      id: "2",
       title: "Expenses",
       value: "₱86,230",
       change: { value: "₱5,230", type: "increase", percentage: "8%" },
@@ -105,6 +100,7 @@ const KpiCards = ({ cards }: KpiCardsProps) => {
       description: "Monthly budget: ₱90,000",
     },
     {
+      id: "3",
       title: "Profit",
       value: "₱38,550",
       change: { value: "₱7,200", type: "increase", percentage: "23%" },
@@ -113,6 +109,7 @@ const KpiCards = ({ cards }: KpiCardsProps) => {
       description: "Monthly target: ₱45,000",
     },
     {
+      id: "4",
       title: "Outstanding Payables",
       value: "₱42,650",
       period: "Current",
@@ -120,6 +117,7 @@ const KpiCards = ({ cards }: KpiCardsProps) => {
       description: "31-60 days: moderate risk",
     },
     {
+      id: "5",
       title: "Outstanding Receivables",
       value: "₱78,320",
       period: "Current",
@@ -131,7 +129,7 @@ const KpiCards = ({ cards }: KpiCardsProps) => {
   const displayCards = cards || defaultCards;
 
   return (
-    <div className="w-full bg-[#F0F0F0] p-4 rounded-lg">
+    <div className="w-full bg-[#F0F0F0] p-4 rounded-lg"> 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {displayCards.map((card, index) => (
           <KpiCard key={index} {...card} />
