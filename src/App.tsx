@@ -15,6 +15,8 @@ function App() {
   const Inventory = lazy(() => import("./components/pages/Inventory"));
   const CashFlow = lazy(() => import("./components/pages/CashFlow"));
   const Procurements = lazy(() => import("./components/pages/procurementt"));
+  const TestInventory = lazy(() => import("./components/pages/testInventory"));
+  const TestCashFlow = lazy(() => import("./components/pages/testCashFlow"));
   
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -29,6 +31,8 @@ function App() {
             <Route path="/cash-flow" element={<CashFlow />} />
             <Route path="/test-financial" element={<TestFinancial />} />
             <Route path="/procurementt" element={<Procurements />} />
+            <Route path="/test-inventory" element={<TestInventory />} />
+            <Route path="/test-cash-flow" element={<TestCashFlow />} />
             {/*<Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Navigate to="/" replace />} />*/}

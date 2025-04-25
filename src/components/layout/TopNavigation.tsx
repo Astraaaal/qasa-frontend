@@ -117,6 +117,16 @@ const TopNavigation = () => {
       icon: <ShoppingCart size={18} />,
       label: "Test Procurement",
       path: "/procurementt",
+    },
+    {
+      icon: <Package size={18} />,
+      label: "Test Inventory",
+      path: "/test-inventory",
+    },
+    {
+      icon: <Wallet size={18} />,
+      label: "Test Cash Flow",
+      path: "/test-cash-flow",
     }
   ];
 
