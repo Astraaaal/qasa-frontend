@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
   isLoggedIn?: boolean;
 }
 
-const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
+const DashboardLayout = ({ children, isLoggedIn = false }: DashboardLayoutProps = {}) => {
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       {/* Top Navigation */}
@@ -18,20 +18,19 @@ const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Secondary Header */}
-        <header className="h-14 bg-white border-b border-[#DCDCDC] flex items-center px-4 justify-between">
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-[#20476E]">
-              Dashboard
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <RefreshButton/>
-            <div className="bg-[#F0F0F0] px-3 py-1 rounded-md text-sm text-[#20476E]">
-              <span>Last updated: {new Date().toLocaleDateString()}</span>
+        {isLoggedIn && (
+          <header className="h-14 bg-white border-b border-[#DCDCDC] flex items-center px-4 justify-between">
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-[#20476E]">Dashboard</h1>
             </div>
-          </div>
-        </header>
+            <div className="flex items-center gap-4">
+              <RefreshButton />
+              <div className="bg-[#F0F0F0] px-3 py-1 rounded-md text-sm text-[#20476E]">
+                <span>Last updated: {new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
+          </header>
+        )}
 
         {/* Content Area */}
         <main className="flex-1 overflow-auto bg-[#F0F0F0]">

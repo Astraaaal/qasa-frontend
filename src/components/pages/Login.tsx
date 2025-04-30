@@ -42,12 +42,10 @@ const Login = () => {
       <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Login to qASA</h2>
 
-        {/* ✅ Show success message */}
         {success && (
           <div className="text-green-600 text-sm mb-2">Login successful! Redirecting...</div>
         )}
 
-        {/* ❌ Show error message */}
         {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
 
         <input
