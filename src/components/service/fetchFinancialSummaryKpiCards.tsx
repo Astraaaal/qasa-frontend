@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FinancialSummaryKpiCardsProps } from '../types/FinancialSummaryKpiCards';
+import { FinancialSummaryKpiCardsProps } from '../types/FinancialSummary';
 
 const fetchFinancialSummaryKpiCards: React.FC = () => {
   const [kpis, setKpis] = useState<FinancialSummaryKpiCardsProps[]>([]);

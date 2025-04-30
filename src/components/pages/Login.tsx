@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from '../context/LoginContext';
+import TopNavigation from "../layout/TopNavigation";
 
 const dummyUsers = [
     { username: "A19-001", password: "password123" },
     { username: "A19-002", password: "mypass456" },
+    { username: "123", password: "123" },
   ];
   
   const Login = () => {

@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react";
-import { FinancialSummaryKpiCardsProps } from "../../types/FinancialSummaryKpiCards";
+import { FinancialSummaryKpiCardsProps } from "../../types/FinancialSummary";
 
 const KpiCard = ({
   title = "Revenue",

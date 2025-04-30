@@ -1,43 +1,46 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from "./components/pages/home";
-import Login from "./components/dashboard/Login";
-import { ThemeProvider } from "./context/ThemeContext";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from "./components/pages/Login";
+import { ThemeProvider } from "./components/context/ThemeContext";
 import DashboardLayout from "./components/layout/DashboardLayout";
+import ProtectedRoute from "./components/context/ProtectedRoute";
 
 function App() {
-  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+  const isLoggedIn = window.localStorage.getItem("loggedIn") === "true";
 
+  const Dashboard = lazy(() => import("./components/pages/home"));
   const FinancialSummary = lazy(() => import("./components/pages/FinancialSummary"));
-  const TestFinancial = lazy(() => import("./components/pages/testFinancial"));
   const SalesPerformance = lazy(() => import("./components/pages/SalesPerformance"));
   const Procurement = lazy(() => import("./components/pages/Procurement"));
   const Inventory = lazy(() => import("./components/pages/Inventory"));
   const CashFlow = lazy(() => import("./components/pages/CashFlow"));
-  const Procurements = lazy(() => import("./components/pages/procurementt"));
-  const TestInventory = lazy(() => import("./components/pages/testInventory"));
-  const TestCashFlow = lazy(() => import("./components/pages/testCashFlow"));
   
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <ThemeProvider>
-        <DashboardLayout>
+        <>
+          <DashboardLayout isLoggedIn={isLoggedIn}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/financial-summary" element={<FinancialSummary />} />
-            <Route path="/sales-performance" element={<SalesPerformance />} />
-            <Route path="/procurement" element={<Procurement />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/cash-flow" element={<CashFlow />} />
-            <Route path="/test-financial" element={<TestFinancial />} />
-            <Route path="/procurementt" element={<Procurements />} />
-            <Route path="/test-inventory" element={<TestInventory />} />
-            <Route path="/test-cash-flow" element={<TestCashFlow />} />
-            {/*<Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<Navigate to="/" replace />} />*/}
+            {!isLoggedIn &&(
+              <>
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Login />} />
+              </>
+            )}
+            
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/financial-summary" element={<FinancialSummary />} />
+              <Route path="/sales-performance" element={<SalesPerformance />} />
+              <Route path="/procurement" element={<Procurement />} />
+              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/cash-flow" element={<CashFlow />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Route>
           </Routes>
-        </DashboardLayout>
+          </DashboardLayout>
+        </>
       </ThemeProvider>
     </Suspense>
   );

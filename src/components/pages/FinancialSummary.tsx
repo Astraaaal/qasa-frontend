@@ -4,11 +4,8 @@ import PendingTransactions from "../dashboard/financialSummary/PendingTransactio
 import ExpensesBreakdown from "../dashboard/financialSummary/ExpensesBreakdown";
 import RevenueExpensesTrend from "../dashboard/financialSummary/RevenueExpensesTrend";
 import ActionButtons from "../dashboard/common/RefreshButton";
+import { FinancialSummaryProps } from "../types/FinancialSummary";
 
-interface FinancialSummaryProps {
-  title?: string;
-  subtitle?: string;
-}
 
 const FinancialSummary = ({
   title = "Financial Summary",
@@ -23,13 +20,8 @@ const FinancialSummary = ({
 
       {/* KPI Cards Section */}
       <div className="mb-6">
-        <KpiCards />
+        <KpiCards id={""} title={""} value={""} />
       </div>
-
-      {/* Action Buttons
-      <div className="mb-6">
-        <ActionButtons />
-      </div>*/}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

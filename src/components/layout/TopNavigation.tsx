@@ -35,17 +35,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import qasaLogo from '../assets/qASA-logo.png';
-import { ThemeContext } from "../../context/ThemeContext";
+import { ThemeContext } from "../context/ThemeContext";
 
 interface NavItemProps {
-  icon: React.ReactNode;
   label: string;
   path: string;
   isActive?: boolean;
 }
 
 
-const NavItem = ({ icon, label, path, isActive = false }: NavItemProps) => {
+const NavItem = ({ label, path, isActive = false }: NavItemProps) => {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -59,7 +58,6 @@ const NavItem = ({ icon, label, path, isActive = false }: NavItemProps) => {
                 : "text-[#20476E] hover:bg-[#F0F0F0]",
             )}
           >
-            <div className="w-5 h-5">{icon}</div>
             <span className="font-sans text-sm">{label}</span>
           </Link>
         </TooltipTrigger>
@@ -79,54 +77,28 @@ const TopNavigation = () => {
 
   const navItems = [
     {
-      icon: <Home size={18} />,
       label: "Dashboard",
-      path: "/",
+      path: "/dashboard",
     },
     {
-      icon: <DollarSign size={18} />,
       label: "Financial Summary",
       path: "/financial-summary",
     },
     {
-      icon: <BarChart3 size={18} />,
       label: "Sales Performance",
       path: "/sales-performance",
     },
     {
-      icon: <ShoppingCart size={18} />,
       label: "Procurement",
       path: "/procurement",
     },
     {
-      icon: <Package size={18} />,
       label: "Inventory",
       path: "/inventory",
     },
     {
-      icon: <Wallet size={18} />,
       label: "Cash Flow",
       path: "/cash-flow",
-    },
-    {
-      icon: <DollarSign size={18} />,
-      label: "Test Financial",
-      path: "/test-financial",
-    },
-    {
-      icon: <ShoppingCart size={18} />,
-      label: "Test Procurement",
-      path: "/procurementt",
-    },
-    {
-      icon: <Package size={18} />,
-      label: "Test Inventory",
-      path: "/test-inventory",
-    },
-    {
-      icon: <Wallet size={18} />,
-      label: "Test Cash Flow",
-      path: "/test-cash-flow",
     }
   ];
 
@@ -157,7 +129,6 @@ const TopNavigation = () => {
             {navItems.map((item, index) => (
               <NavItem
                 key={index}
-                icon={item.icon}
                 label={item.label}
                 path={item.path}
                 isActive={currentPath === item.path}
@@ -167,14 +138,6 @@ const TopNavigation = () => {
 
           {/* User Profile Dropdown */}
           <div className="hidden md:flex items-center space-x-4">
-            {/*<Button
-              variant="ghost"
-              size="icon"
-              className="text-gray-600 h-9 w-9"
-            >
-              <HelpCircle className="h-4 w-4" />
-            </Button>*/}
-
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -192,7 +155,7 @@ const TopNavigation = () => {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem /*asChild*/>
+                <DropdownMenuItem asChild>
                 <button
                   onClick={() => console.log('Toggle Help')} // replace with your help toggle function
                   className="flex items-center w-full text-left hover:text-[#0078D7]"
@@ -246,7 +209,6 @@ const TopNavigation = () => {
                   )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className="w-5 h-5">{item.icon}</div>
                   <span className="font-sans text-sm">{item.label}</span>
                 </Link>
               ))}
@@ -271,7 +233,6 @@ const TopNavigation = () => {
             {navItems.map((item, index) => (
               <NavItem
                 key={index}
-                icon={item.icon}
                 label={item.label}
                 path={item.path}
                 isActive={currentPath === item.path}

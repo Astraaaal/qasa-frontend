@@ -16,3 +16,8 @@ export interface FinancialSummaryKpiCardsProps {
 export interface FinancialSummaryKpiCardsProps {
   cards?: FinancialSummaryKpiCardsProps[];
 }
+
+export interface FinancialSummaryProps {
+  title?: string;
+  subtitle?: string;
+}

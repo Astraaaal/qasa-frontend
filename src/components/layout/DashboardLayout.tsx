@@ -6,6 +6,7 @@ import RefreshButton from "../dashboard/common/RefreshButton";
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
+  isLoggedIn?: boolean;
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps = {}) => {
