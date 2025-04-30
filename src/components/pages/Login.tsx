@@ -11,26 +11,29 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false); // ✅ Add success state
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Dummy login logic
     const foundUser = dummyUsers.find(
       (user) => user.username === username && user.password === password
     );
 
     if (foundUser) {
-      // Success
+      // ✅ Success case
       localStorage.setItem("loggedIn", "true");
       localStorage.setItem("studentId", username);
-      localStorage.setItem("loginStatus", "success"); // ✅ Add success identifier
-      navigate("/");
+      localStorage.setItem("loginStatus", "success");
+      setSuccess(true);
+      setError("");
+      setTimeout(() => navigate("/"), 1500); // wait briefly before navigating
     } else {
-      // Failure
+      // ❌ Failure case
       setError("Invalid credentials. Please try again.");
-      localStorage.setItem("loginStatus", "failed"); // ❌ Add failure identifier
+      localStorage.setItem("loginStatus", "failed");
+      setSuccess(false);
     }
   };
 
@@ -38,7 +41,15 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Login to qASA</h2>
+
+        {/* ✅ Show success message */}
+        {success && (
+          <div className="text-green-600 text-sm mb-2">Login successful! Redirecting...</div>
+        )}
+
+        {/* ❌ Show error message */}
         {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+
         <input
           type="text"
           placeholder="Username"

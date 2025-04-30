@@ -185,13 +185,19 @@ const TopNavigation = () => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem /*asChild*/>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center w-full text-left hover:text-[#FF0000]"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </button>
+                <button
+                  onClick={() => {
+                    const confirmed = window.confirm("Are you sure you want to log out?");
+                    if (confirmed) {
+                      localStorage.removeItem("loggedIn");
+                      window.location.href = "/login";
+                    }
+                  }}
+                  className="flex items-center w-full text-left hover:text-[#FF0000]"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
