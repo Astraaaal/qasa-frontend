@@ -75,6 +75,11 @@ const TopNavigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
+  const handleLogout = () => {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "/login";
+  };
+
   const navItems = [
     {
       label: "Dashboard",
@@ -181,7 +186,7 @@ const TopNavigation = () => {
 
                 <DropdownMenuItem /*asChild*/>
                   <button
-                    onClick={() => console.log('Logging out')}
+                    onClick={handleLogout}
                     className="flex items-center w-full text-left hover:text-[#FF0000]"
                   >
                     <LogOut className="mr-2 h-4 w-4" />

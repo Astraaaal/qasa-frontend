@@ -24,10 +24,8 @@ function App() {
             {!isLoggedIn &&(
               <>
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<Login />} />
               </>
             )}
-            
 
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
