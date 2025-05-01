@@ -1,38 +1,33 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const dummyUsers = [
-  { username: "A19-001", password: "password123" },
-  { username: "A19-002", password: "mypass456" },
-  { username: "123", password: "123" },
-];
+import { loginUser } from "@/components/service/api/auth"; // ✅ Adjust path if needed
+import { useAuth } from "@/components/service/contexts/AuthContext"; // ✅ Import Auth Context
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false); // ✅ Add success state
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+
+  const { setToken } = useAuth(); // ✅ Use the auth context
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
-    const foundUser = dummyUsers.find(
-      (user) => user.username === username && user.password === password
-    );
+    const result = await loginUser(username, password);
 
-    if (foundUser) {
-      // ✅ Success case
-      localStorage.setItem("loggedIn", "true");
+    if (result && result.token) {
+      setToken(result.token); // ✅ Store token via context
+
       localStorage.setItem("studentId", username);
-      localStorage.setItem("loginStatus", "success");
+      localStorage.setItem("loggedIn", "true");
       setSuccess(true);
-      setError("");
-      setTimeout(() => navigate("/"), 1500); // wait briefly before navigating
+      setTimeout(() => navigate("/"), 1000); // ✅ Redirect
     } else {
-      // ❌ Failure case
-      setError("Invalid credentials. Please try again.");
-      localStorage.setItem("loginStatus", "failed");
+      setError("Invalid username or password.");
+      localStorage.setItem("loggedIn", "false");
       setSuccess(false);
     }
   };
@@ -43,31 +38,37 @@ const Login = () => {
         <h2 className="text-xl font-semibold mb-4 text-center">Login to qASA</h2>
 
         {success && (
-          <div className="text-green-600 text-sm mb-2">Login successful! Redirecting...</div>
+          <div className="text-green-600 text-sm mb-2">
+            Login successful! Redirecting...
+          </div>
         )}
 
         {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
 
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full border px-3 py-2 rounded mb-2"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border px-3 py-2 rounded mb-4"
-        />
-        <button
-          onClick={handleLogin}
-          className="w-full bg-[#1C61A1] text-white py-2 rounded"
-        >
-          Log In
-        </button>
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full border px-3 py-2 rounded mb-2"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border px-3 py-2 rounded mb-4"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-[#1C61A1] text-white py-2 rounded"
+          >
+            Log In
+          </button>
+        </form>
       </div>
     </div>
   );
