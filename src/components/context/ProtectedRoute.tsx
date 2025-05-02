@@ -1,22 +1,34 @@
-import { Outlet, replace, useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
-import { useEffect } from "react";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import TopNavigation from '../layout/TopNavigation'; // Adjust the import path as necessary
 
-function ProtectedRoute() {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  console.log("from protectedRoute component:", isAuthenticated);
+const ProtectedRoute = () => {
+  const { currentUser, loading } = useAuth();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login", {
-        viewTransition: true,
-        replace: true,
-      });
-    }
-  }, []);
+  // If still loading, show a loading indicator
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg">Loading...</p>
+      </div>
+    );
+  }
 
-  return <Outlet />;
-}
+  // If not authenticated, redirect to login
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If authenticated, render the child routes with TopNavigation
+  return (
+    <>
+      {/*<TopNavigation />*/}
+      <main className="container mx-auto px-4 py-6">
+        <Outlet />
+      </main>
+    </>
+  );
+};
 
 export default ProtectedRoute;

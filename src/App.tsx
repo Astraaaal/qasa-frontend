@@ -7,7 +7,7 @@ import ProtectedRoute from "./components/context/ProtectedRoute";
 import { useAuth } from "./components/context/AuthContext";
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const isLoggedIn = window.localStorage.getItem("loggedIn") === "true";
 
   const Dashboard = lazy(() => import("./components/pages/home"));
   const FinancialSummary = lazy(() => import("./components/pages/FinancialSummary"));
@@ -19,27 +19,27 @@ function App() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <ThemeProvider>
-        <>
-          <DashboardLayout isLoggedIn={isAuthenticated}>
-          <Routes>
-            {!isAuthenticated &&(
-              <>
-                <Route path="/login" element={<Login />} />
-              </>
-            )}
+        <DashboardLayout isLoggedIn={isLoggedIn}>
+        <Routes>
+          {!isLoggedIn &&(
+            <>
+              <Route path="/login" element={<Login />} />
+            </>
+          )}
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/financial-summary" element={<FinancialSummary />} />
-              <Route path="/sales-performance" element={<SalesPerformance />} />
-              <Route path="/procurement" element={<Procurement />} />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route path="/cash-flow" element={<CashFlow />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Route>
-          </Routes>
-          </DashboardLayout>
-        </>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/financial-summary" element={<FinancialSummary />} />
+            <Route path="/sales-performance" element={<SalesPerformance />} />
+            <Route path="/procurement" element={<Procurement />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/cash-flow" element={<CashFlow />} />
+
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />      
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Route>
+        </Routes>
+        </DashboardLayout>
       </ThemeProvider>
     </Suspense>
   );

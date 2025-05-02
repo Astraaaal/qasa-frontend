@@ -1,85 +1,112 @@
-import { type Result, tryCatch } from "@/lib/try-catch";
-import {
-  createContext,
-  useState,
-  useContext,
-  type ReactNode,
-  useEffect,
-} from "react";
-import { loginUser } from "../service/api/auth";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-interface AuthContextProps {
-  accessToken: string;
-  expiresIn: number;
-  loading: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
-  logout: () => void;
-  isAuthenticated: boolean;
-}
+// Create the Auth Context
+const AuthContext = createContext(null);
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+// Custom hook to use the auth context
+export const useAuth = () => useContext(AuthContext);
 
-export function useAuth() {
-  const ctx = useContext(AuthContext);
+// Dummy users with name information
+const dummyUsers = [
+  { 
+    username: "michael", 
+    password: "michael",
+    name: "Michael Angelo A Gonzales"
+  },
+  { 
+    username: "123", 
+    password: "123",
+    name: "Test User"
+  },
+];
 
-  if (!ctx) throw new Error("useAuth can only be used within AuthProvider");
+export const AuthProvider = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [authError, setAuthError] = useState("");
+    
+    // Check if user is already logged in from localStorage
+    useEffect(() => {
+        const checkUserAuth = () => {
+            const isLoggedIn = localStorage.getItem("loggedIn");
+            const storedUser = localStorage.getItem("user");
+            
+            if (isLoggedIn === "true" && storedUser) {
+                try {
+                    const userData = JSON.parse(storedUser);
+                    setCurrentUser(userData);
+                } catch (error) {
+                    console.error("Error parsing user data:", error);
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("loggedIn");
+                }
+            }
+            setLoading(false);
+        };
+        
+        checkUserAuth();
+    }, []);
 
-  return ctx;
-}
+    // Login function
+    const login = (username, password) => {
+        // Find user in our dummy database
+        const foundUser = dummyUsers.find(
+            (user) => user.username === username && user.password === password
+        );
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [accessToken, setAccessToken] = useState("");
-  const [expiresIn, setExpiresIn] = useState(0);
-  const [loading, setIsLoading] = useState(false);
+        if (foundUser) {
+            // Create user object without password
+            const userData = {
+                username: foundUser.username,
+                name: foundUser.name
+            };
+            
+            // Save to localStorage
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("studentId", username);
+            localStorage.setItem("loginStatus", "success");
+            localStorage.setItem("user", JSON.stringify(userData));
+            
+            // Update state
+            setCurrentUser(userData);
+            setAuthError("");
+            return { success: true, message: "Login successful" };
+        } else {
+            setAuthError("Invalid credentials. Please try again.");
+            localStorage.setItem("loginStatus", "failed");
+            return { success: false, message: "Invalid credentials" };
+        }
+    };
 
-  async function login(username: string, password: string) {
-    setIsLoading(true);
+    // Logout function
+    const logout = () => {
+        localStorage.removeItem("loggedIn");
+        localStorage.removeItem("studentId");
+        localStorage.removeItem("loginStatus");
+        localStorage.removeItem("user");
+        setCurrentUser(null);
+    };
 
-    const { data, error } = await tryCatch(loginUser(username, password));
+    // Check if user is authenticated
+    const isAuthenticated = () => {
+        return !!currentUser;
+    };
 
-    // just throw the error
-    if (error) {
-      setIsLoading(false);
-      throw error;
-    }
+    const value = {
+        currentUser,
+        login,
+        logout,
+        loading,
+        authError,
+        isAuthenticated
+    };
 
-    console.log(data);
-    // save access token and expiry in state
-    console.log("Access Token (from data):", data.accessToken);
-    console.log("Expires In (from data):", data.expiresIn, "Now:", Date.now());
+    return (
+        <AuthContext.Provider value={value}>
+            {!loading && children}
+        </AuthContext.Provider>
+    );
+};
 
-    setAccessToken(data.accessToken);
-    // // save to milliseconds since Date.now is using Unix Epoch
-    setExpiresIn(Date.now() + data.expiresIn * 1000);
-    localStorage.setItem("token", accessToken);
-    // setIsLoading(false);
-    // console.log("Access Token:", accessToken);
-    // console.log("Expires In:", expiresIn, "Now:", Date.now());
-
-    setIsLoading(false);
-    return true;
-  }
-
-  function logout() {
-    setAccessToken(null);
-    setExpiresIn(null);
-  }
-
-  // isAuthenticated is true if
-  // accessToken exists
-  // expiresAt exits
-  // current time is before token expiry time
-  const isAuthenticated =
-    !!accessToken && !!expiresIn && Date.now() < expiresIn;
-
-  const value: AuthContextProps = {
-    accessToken,
-    expiresIn,
-    login,
-    logout,
-    isAuthenticated,
-    loading,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+export default AuthContext;

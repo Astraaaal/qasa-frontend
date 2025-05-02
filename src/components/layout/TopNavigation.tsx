@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   BarChart3,
@@ -36,13 +36,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import qasaLogo from '../assets/qASA-logo.png';
 import { ThemeContext } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext"; // Import the useAuth hook from your AuthContext
 
 interface NavItemProps {
   label: string;
   path: string;
   isActive?: boolean;
 }
-
 
 const NavItem = ({ label, path, isActive = false }: NavItemProps) => {
   return (
@@ -74,11 +74,38 @@ const TopNavigation = () => {
   const currentPath = location.pathname;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { currentUser, logout, isAuthenticated } = useAuth(); // Use your existing auth hook
+  const [userName, setUserName] = useState("");
+
+  // Get user data from localStorage
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        // If "A19-001" is logged in, always show "Michael Angelo A Gonzales"
+        // Otherwise, use the name from user data
+        if (parsedUser.username === "A19-001") {
+          setUserName("Michael Angelo A Gonzales");
+        } else if (parsedUser.name) {
+          setUserName(parsedUser.name);
+        }
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+      }
+    }
+  }, [currentUser]);
 
   const handleLogout = () => {
-    localStorage.removeItem("loggedIn");
-    window.location.href = "/login";
+    const confirmed = window.confirm("Are you sure you want to log out?");
+    if (confirmed) {
+      logout(); // Call the logout function from your AuthContext
+      window.location.href = "/login"; // Redirect to login
+    }
   };
+
+  // Check if user is authenticated
+  const isUserAuthenticated = isAuthenticated && currentUser;
 
   const navItems = [
     {
@@ -120,92 +147,92 @@ const TopNavigation = () => {
               </h1>
             </div>
 
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden text-[#20476E]"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile menu button - Only show if authenticated */}
+            {isUserAuthenticated && (
+              <button
+                className="md:hidden text-[#20476E]"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            )}
           </div>
 
-          {/* Navigation Links - hidden on mobile, shown on desktop */}
-          <div className="hidden md:flex md:ml-8 space-x-1">
-            {navItems.map((item, index) => (
-              <NavItem
-                key={index}
-                label={item.label}
-                path={item.path}
-                isActive={currentPath === item.path}
-              />
-            ))}
-          </div>
+          {/* Navigation Links - Only show if authenticated */}
+          {isUserAuthenticated && (
+            <div className="hidden md:flex md:ml-8 space-x-1">
+              {navItems.map((item, index) => (
+                <NavItem
+                  key={index}
+                  label={item.label}
+                  path={item.path}
+                  isActive={currentPath === item.path}
+                />
+              ))}
+            </div>
+          )}
 
-          {/* User Profile Dropdown */}
-          <div className="hidden md:flex items-center space-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-2 px-2"
-                >
-                  <span className="text-sm font-medium text-gray-700">
-                    Michael Angelo Gonzales
-                  </span>
-                  <ChevronDown className="h-4 w-4 text-gray-500" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 !bg-white !backdrop-blur-none shadow-md border border-gray-200">
-                <DropdownMenuLabel>Settings</DropdownMenuLabel>
+          {/* User Profile Dropdown - Only show if authenticated */}
+          {isUserAuthenticated && (
+            <div className="hidden md:flex items-center space-x-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 px-2"
+                  >
+                    <span className="text-sm font-medium text-gray-700">
+                      {userName || "User"}
+                    </span>
+                    <ChevronDown className="h-4 w-4 text-gray-500" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 !bg-white !backdrop-blur-none shadow-md border border-gray-200">
+                  <DropdownMenuLabel>Settings</DropdownMenuLabel>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem asChild>
-                <button
-                  onClick={() => console.log('Toggle Help')} // replace with your help toggle function
-                  className="flex items-center w-full text-left hover:text-[#0078D7]"
-                >
-                  <HelpCircle className="mr-2 h-4 w-4" />
-                  <span>Help</span>
-                </button>
-                </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <button
+                      onClick={() => console.log('Toggle Help')}
+                      className="flex items-center w-full text-left hover:text-[#0078D7]"
+                    >
+                      <HelpCircle className="mr-2 h-4 w-4" />
+                      <span>Help</span>
+                    </button>
+                  </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem /*asChild*/>
-                <button
-                  onClick={toggleTheme}
-                  className="flex items-center w-full text-left hover:text-[#0078D7]"
-                >
-                  {theme === "dark" ? <Sun className="mr-2 h-4 w-4"/> : <Moon className="mr-2 h-4 w-4"/>}
-                  <span>Theme</span>
-                </button>
-                </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <button
+                      onClick={toggleTheme}
+                      className="flex items-center w-full text-left hover:text-[#0078D7]"
+                    >
+                      {theme === "dark" ? <Sun className="mr-2 h-4 w-4"/> : <Moon className="mr-2 h-4 w-4"/>}
+                      <span>Theme</span>
+                    </button>
+                  </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem /*asChild*/>
-                <button
-                  onClick={() => {
-                    const confirmed = window.confirm("Are you sure you want to log out?");
-                    if (confirmed) {
-                      localStorage.removeItem("loggedIn");
-                      window.location.href = "/login";
-                    }
-                  }}
-                  className="flex items-center w-full text-left hover:text-[#FF0000]"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                  <DropdownMenuItem>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full text-left hover:text-[#FF0000]"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
 
-        {/* Mobile Navigation - shown when menu is open */}
-        {mobileMenuOpen && (
+        {/* Mobile Navigation - Only show if authenticated and menu is open */}
+        {isUserAuthenticated && mobileMenuOpen && (
           <div className="md:hidden py-2 bg-white border-t border-[#DCDCDC]">
             <div className="flex flex-col space-y-1">
               {navItems.map((item, index) => (
@@ -227,10 +254,10 @@ const TopNavigation = () => {
               <div className="flex items-center justify-between px-3 py-2 mt-2 border-t border-[#DCDCDC]">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-gray-700">
-                    Michael Angelo Gonzales
+                    {userName || "User"}
                   </span>
                 </div>
-                <Button variant="ghost" size="sm" className="text-gray-600">
+                <Button variant="ghost" size="sm" className="text-gray-600" onClick={handleLogout}>
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
@@ -238,19 +265,21 @@ const TopNavigation = () => {
           </div>
         )}
 
-        {/* Horizontal scrollable navigation for tablets/small screens */}
-        <div className="md:hidden overflow-x-auto py-2 scrollbar-hide">
-          <div className="flex space-x-1 min-w-max">
-            {navItems.map((item, index) => (
-              <NavItem
-                key={index}
-                label={item.label}
-                path={item.path}
-                isActive={currentPath === item.path}
-              />
-            ))}
+        {/* Horizontal scrollable navigation for tablets/small screens - Only show if authenticated */}
+        {isUserAuthenticated && (
+          <div className="md:hidden overflow-x-auto py-2 scrollbar-hide">
+            <div className="flex space-x-1 min-w-max">
+              {navItems.map((item, index) => (
+                <NavItem
+                  key={index}
+                  label={item.label}
+                  path={item.path}
+                  isActive={currentPath === item.path}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
