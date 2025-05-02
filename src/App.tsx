@@ -4,9 +4,10 @@ import Login from "./components/pages/Login";
 import { ThemeProvider } from "./components/context/ThemeContext";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/context/ProtectedRoute";
+import { useAuth } from "./components/context/AuthContext";
 
 function App() {
-  const isLoggedIn = window.localStorage.getItem("loggedIn") === "true";
+  const { isAuthenticated } = useAuth();
 
   const Dashboard = lazy(() => import("./components/pages/home"));
   const FinancialSummary = lazy(() => import("./components/pages/FinancialSummary"));
@@ -19,9 +20,9 @@ function App() {
     <Suspense fallback={<p>Loading...</p>}>
       <ThemeProvider>
         <>
-          <DashboardLayout isLoggedIn={isLoggedIn}>
+          <DashboardLayout isLoggedIn={isAuthenticated}>
           <Routes>
-            {!isLoggedIn &&(
+            {!isAuthenticated &&(
               <>
                 <Route path="/login" element={<Login />} />
               </>

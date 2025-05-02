@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("financial-summary");
+  const { accessToken, isAuthenticated, expiresIn } = useAuth();
+
+  useEffect(() => {
+    console.log("Login.tsx saw accessToken change:", accessToken);
+    console.log("am i auth'ed?", isAuthenticated);
+    console.log("Access Token (from useAuth):", accessToken);
+    console.log("Expiry (from useAuth):", expiresIn);
+  }, [accessToken, isAuthenticated, expiresIn]);
 
   return (
     <div className="w-full h-full bg-[#F0F0F0] p-6 overflow-auto">
