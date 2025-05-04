@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { DollarSign, Calendar, ArrowDownCircle, ArrowUpCircle, Clock } from "lucide-react";
+import { Wallet, Banknote, ArrowDownCircle, ArrowUpCircle, Clock } from "lucide-react";
 import { TransactionProps } from "../types/CashFlow";
 import { BankAccountProps } from "../types/CashFlow";
 import { CashFlowDataProps } from "../types/CashFlow";
@@ -46,9 +46,9 @@ export default function CashFlowDashboard() {
   const COLORS = ["#0078D7", "#20476E"];
   
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-PH', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'PHP',
       minimumFractionDigits: 2
     }).format(amount);
   };
@@ -74,7 +74,7 @@ export default function CashFlowDashboard() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-gray-800">Total Bank Balance</h3>
               <span className="bg-blue-100 p-2 rounded-full">
-                <DollarSign className="w-5 h-5 text-blue-600" />
+                <Banknote className="w-5 h-5 text-blue-600" />
               </span>
             </div>
             <div className="text-2xl font-bold text-gray-900">{formatCurrency(totalBankBalance)}</div>
@@ -86,7 +86,7 @@ export default function CashFlowDashboard() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-gray-800">Cash on Hand</h3>
               <span className="bg-blue-100 p-2 rounded-full">
-                <DollarSign className="w-5 h-5 text-blue-600" />
+                <Wallet className="w-5 h-5 text-blue-600" />
               </span>
             </div>
             <div className="text-2xl font-bold text-gray-900">{formatCurrency(cashOnHand)}</div>
