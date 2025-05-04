@@ -8,7 +8,7 @@ interface MonthlySalesChartProps {
 
 const MonthlySalesChart: React.FC<MonthlySalesChartProps> = ({ data }) => {
   const formatCurrency = (value: number): string => {
-    return `$${value.toLocaleString()}`;
+    return `₱${value.toLocaleString()}`;
   };
 
   return (
