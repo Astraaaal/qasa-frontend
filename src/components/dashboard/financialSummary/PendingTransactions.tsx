@@ -96,7 +96,7 @@ const PendingTransactions = ({
   return (
     <Card className="w-full h-full bg-white shadow-md">
       <CardHeader className="bg-[#0078D7] text-white rounded-t-xl">
-        <CardTitle className="text-lg font-bold">Pending for Posting</CardTitle>
+        <CardTitle className="text-lg text-[#f0f0f0] font-bold">Pending for Posting</CardTitle>
       </CardHeader>
       <CardContent className="p-4 overflow-auto max-h-[220px]">
         {transactions.length === 0 ? (
