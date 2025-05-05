@@ -1,8 +1,8 @@
 import React from 'react';
-import MetricsSection from '../dashboard/salesPerformance/KpiSection';
-import ChartsSection from '../dashboard/salesPerformance/ChartSection';
-import TopSellingProductsTable from '../dashboard/salesPerformance/TopSellingProductsTable';
-import PendingSalesTable from '../dashboard/salesPerformance/PendingSalesTable';
+import MetricsSection from '../modules/salesPerformance/KpiSection';
+import ChartsSection from '../modules/salesPerformance/ChartSection';
+import TopSellingProductsTable from '../modules/salesPerformance/TopSellingProductsTable';
+import PendingSalesTable from '../modules/salesPerformance/PendingSalesTable';
 import { 
   monthlySalesData, 
   productSalesData, 
@@ -26,7 +26,7 @@ const SalesPerformance = ({
         <p className="text-sm text-gray-600">{subtitle}</p>
       </div>
 
-      <div className="container mx-auto px-6 py-6">
+      <div className="container mx-auto px-1 py-5">
         <MetricsSection />
         <ChartsSection 
           monthlySalesData={monthlySalesData}
