@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 import qasaLogo from '../assets/qASA-logo.png'; // Make sure this path is correct
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login, currentUser, authError } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   // If user is already logged in, redirect to dashboard
   useEffect(() => {
@@ -53,6 +55,11 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -101,15 +108,29 @@ const Login = () => {
             >
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1C61A1] focus:border-transparent"
-              disabled={isLoading}
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1C61A1] focus:border-transparent"
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeOff size={20} className="text-gray-500" />
+                ) : (
+                  <Eye size={20} className="text-gray-500" />
+                )}
+              </button>
+            </div>
           </div>
           
           <button

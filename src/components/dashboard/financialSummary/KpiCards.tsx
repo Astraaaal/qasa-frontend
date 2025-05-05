@@ -9,7 +9,6 @@ const KpiCard = ({
   value = "₱24,780",
   change = { value: "₱2,430", type: "increase", percentage: "12%" },
   period = "MTD",
-  icon = <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
   status = "green",
   description = "Monthly target",
 }: FinancialSummaryKpiCardsProps) => {
@@ -23,7 +22,6 @@ const KpiCard = ({
     <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center space-x-2">
-          {icon}
           <CardTitle className="text-sm font-bold text-foreground">{title}</CardTitle>
         </div>
         <span className="text-xs font-medium text-muted-foreground">{period}</span>
@@ -87,7 +85,6 @@ const KpiCards = ({ cards }: FinancialSummaryKpiCardsProps) => {
       value: "₱124,780",
       change: { value: "₱12,430", type: "increase", percentage: "12%" },
       period: "MTD",
-      icon: <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
       description: "Monthly target: ₱150,000",
     },
     {
@@ -96,7 +93,6 @@ const KpiCards = ({ cards }: FinancialSummaryKpiCardsProps) => {
       value: "₱86,230",
       change: { value: "₱5,230", type: "increase", percentage: "8%" },
       period: "MTD",
-      icon: <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
       description: "Monthly budget: ₱90,000",
     },
     {
@@ -105,7 +101,6 @@ const KpiCards = ({ cards }: FinancialSummaryKpiCardsProps) => {
       value: "₱38,550",
       change: { value: "₱7,200", type: "increase", percentage: "23%" },
       period: "MTD",
-      icon: <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
       description: "Monthly target: ₱45,000",
     },
     {
