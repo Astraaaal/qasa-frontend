@@ -139,7 +139,7 @@ const TopNavigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-2">
           {/* Logo and Mobile Menu Button */}
-          <div className="flex items-center justify-between w-full md:w-auto">
+          <div className="flex items-center justify-between w-full lg:w-auto">
             <div className="flex items-center gap-2">
               <img src={qasaLogo} alt="Custom Logo" className="h-6 w-6" />
               <h1 className="text-xl font-bold text-[#20476E] font-sans">
@@ -149,18 +149,23 @@ const TopNavigation = () => {
 
             {/* Mobile menu button - Only show if authenticated */}
             {isUserAuthenticated && (
-              <button
-                className="md:hidden text-[#20476E]"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
+              <div className="flex items-center gap-2 lg:hidden">
+                <span className="text-sm font-medium text-[#20476E]">
+                  {userName || "User"}
+                </span>
+                <button
+                  className="text-[#20476E]"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                  {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              </div>
             )}
           </div>
 
-          {/* Navigation Links - Only show if authenticated */}
+          {/* Navigation Links - PC SIZE */}
           {isUserAuthenticated && (
-            <div className="hidden md:flex md:ml-8 space-x-1">
+            <div className="hidden lg:flex lg:ml-8 space-x-1">
               {navItems.map((item, index) => (
                 <NavItem
                   key={index}
@@ -172,19 +177,19 @@ const TopNavigation = () => {
             </div>
           )}
 
-          {/* User Profile Dropdown - Only show if authenticated */}
+          {/* User Profile Dropdown - PC SIZE */}
           {isUserAuthenticated && (
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden lg:flex items-center space-x-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2 px-2"
+                    className="flex items-center gap-2 px-2 text-base font-medium text-[#20476E]"
                   >
-                    <span className="text-sm font-medium text-gray-700">
+                    <span>
                       {userName || "User"}
                     </span>
-                    <ChevronDown className="h-4 w-4 text-gray-500" />
+                    <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 !bg-white !backdrop-blur-none shadow-md border border-gray-200">
@@ -195,7 +200,7 @@ const TopNavigation = () => {
                   <DropdownMenuItem>
                     <button
                       onClick={() => console.log('Toggle Help')}
-                      className="flex items-center w-full text-left hover:text-[#0078D7]"
+                      className="flex items-center w-full text-left hover:text-[#f0f0f0]"
                     >
                       <HelpCircle className="mr-2 h-4 w-4" />
                       <span>Help</span>
@@ -205,13 +210,22 @@ const TopNavigation = () => {
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem>
-                    <button
-                      onClick={toggleTheme}
-                      className="flex items-center w-full text-left hover:text-[#0078D7]"
-                    >
-                      {theme === "dark" ? <Sun className="mr-2 h-4 w-4"/> : <Moon className="mr-2 h-4 w-4"/>}
-                      <span>Theme</span>
-                    </button>
+                  <button
+                    onClick={toggleTheme}
+                    className="flex items-center w-full text-left hover:text-[#f0f0f0]"
+                  >
+                    {theme === "dark" ? (
+                      <>
+                        <Sun className="mr-2 h-4 w-4" />
+                        <span>Light Mode</span>
+                      </>
+                    ) : (
+                      <>
+                        <Moon className="mr-2 h-4 w-4" />
+                        <span>Dark Mode</span>
+                      </>
+                    )}
+                  </button>
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator />
@@ -231,9 +245,9 @@ const TopNavigation = () => {
           )}
         </div>
 
-        {/* Mobile Navigation - Only show if authenticated and menu is open */}
+        {/* Mobile Navigation Drawer - Only show if authenticated and menu is open */}
         {isUserAuthenticated && mobileMenuOpen && (
-          <div className="md:hidden py-2 bg-white border-t border-[#DCDCDC]">
+          <div className="lg:hidden py-2 bg-white border-t border-[#DCDCDC]">
             <div className="flex flex-col space-y-1">
               {navItems.map((item, index) => (
                 <Link
@@ -251,32 +265,41 @@ const TopNavigation = () => {
                 </Link>
               ))}
 
-              <div className="flex items-center justify-between px-3 py-2 mt-2 border-t border-[#DCDCDC]">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-gray-700">
-                    {userName || "User"}
-                  </span>
-                </div>
-                <Button variant="ghost" size="sm" className="text-gray-600" onClick={handleLogout}>
-                  <LogOut className="h-4 w-4" />
-                </Button>
+              {/* User controls in mobile menu */}
+              <div className="pt-4 mt-2 border-t border-[#DCDCDC]">
+                <button
+                  onClick={() => console.log('Toggle Help')}
+                  className="w-full flex items-center px-3 py-2 text-[#20476E] hover:bg-[#F0F0F0] rounded-md"
+                >
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span className="text-sm">Help</span>
+                </button>
+                
+                <button
+                  onClick={toggleTheme}
+                  className="w-full flex items-center px-3 py-2 text-[#20476E] hover:bg-[#F0F0F0] rounded-md"
+                >
+                  {theme === "dark" ? (
+                    <>
+                      <Sun className="mr-2 h-4 w-4" />
+                      <span className="text-sm">Light Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="mr-2 h-4 w-4" />
+                      <span className="text-sm">Dark Mode</span>
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center px-3 py-2 text-[#20476E] hover:bg-[#F0F0F0] rounded-md"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span className="text-sm">Log out</span>
+                </button>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Horizontal scrollable navigation for tablets/small screens - Only show if authenticated */}
-        {isUserAuthenticated && (
-          <div className="md:hidden overflow-x-auto py-2 scrollbar-hide">
-            <div className="flex space-x-1 min-w-max">
-              {navItems.map((item, index) => (
-                <NavItem
-                  key={index}
-                  label={item.label}
-                  path={item.path}
-                  isActive={currentPath === item.path}
-                />
-              ))}
             </div>
           </div>
         )}

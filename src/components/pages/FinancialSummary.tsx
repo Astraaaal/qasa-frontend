@@ -1,8 +1,8 @@
 import React from "react";
-import KpiCards from "../dashboard/financialSummary/KpiCards";
-import PendingTransactions from "../dashboard/financialSummary/PendingTransactions";
-import ExpensesBreakdown from "../dashboard/financialSummary/ExpensesBreakdown";
-import RevenueExpensesTrend from "../dashboard/financialSummary/RevenueExpensesTrend";
+import KpiCards from "../modules/financialSummary/KpiCards";
+import PendingTransactions from "../modules/financialSummary/PendingTransactions";
+import ExpensesBreakdown from "../modules/financialSummary/ExpensesBreakdown";
+import RevenueExpensesTrend from "../modules/financialSummary/RevenueExpensesTrend";
 import ActionButtons from "../dashboard/common/RefreshButton";
 import { FinancialSummaryProps } from "../types/FinancialSummary";
 
