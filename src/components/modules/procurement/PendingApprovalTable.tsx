@@ -151,7 +151,7 @@ export const PendingApprovalsTable = () => {
         
         {/* Warning Dialog */}
         {showWarning && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[9999]">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
               <h3 className="text-xl font-bold mb-4">
                 {showWarning.action === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
@@ -182,7 +182,7 @@ export const PendingApprovalsTable = () => {
   
         {/* View Details Form */}
         {showDetailsForm && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[999]">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">Purchase Order Details</h3>
