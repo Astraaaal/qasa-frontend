@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
-import qasaLogo from '../assets/qASA-logo.png'; // Make sure this path is correct
+import qasaLogo from '../assets/qASA-logo.png';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,20 +14,20 @@ const Login = () => {
   const { login, currentUser, authError } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
-  // If user is already logged in, redirect to dashboard
   useEffect(() => {
     if (currentUser) {
       navigate("/dashboard");
     }
   }, [currentUser, navigate]);
 
-  // Update local error state if auth context has an error
   useEffect(() => {
     if (authError) {
+      // Ericson Added API Backend - Display API error message
       setError(authError);
     }
   }, [authError]);
 
+  // Ericson Added API Backend - Modified login handler for API
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -40,24 +40,20 @@ const Login = () => {
     setError("");
 
     try {
-      const result = login(username, password);
+      const result = await login(username, password);
       
       if (result.success) {
         setSuccess(true);
-        // Delay navigation to show success message
         setTimeout(() => navigate("/dashboard"), 1500);
-      } else {
-        setError(result.message || "Login failed. Please try again.");
       }
     } catch (err) {
-      setError("An error occurred during login. Please try again.");
-      console.error("Login error:", err);
+      // Ericson Added API Backend - Show standard error message
+      setError("Invalid credentials. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -65,6 +61,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        
 
         <h3 className="text-xl font-semibold mb-6 text-center text-gray-700">
           Sign in to your qASA account
@@ -143,12 +140,6 @@ const Login = () => {
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Demo accounts:</p>
-          <p className="mt-1">Username: michael, Password: michael</p>
-          <p className="mt-1">Username: 123, Password: 123</p>
-        </div>
       </div>
     </div>
   );
