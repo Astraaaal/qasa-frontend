@@ -143,24 +143,21 @@ const PendingApprovalsTable = () => {
   const [showDetailsForm, setShowDetailsForm] = useState<PurchaseOrder | null>(null);
   const [showAllForm, setShowAllForm] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
   
   const handleAction = (action: string, id: string) => {
     setShowWarning({ action, id });
   };
-  
   const confirmAction = () => {
-    //logic here
     setShowWarning(null);
   };
-  
   const cancelAction = () => {
     setShowWarning(null);
   };
-
+  
   const handleViewDetails = (po: PurchaseOrder) => {
     setShowDetailsForm(po);
   };
-
   const handleViewAll = () => {
     setShowAllForm(true);
   };
@@ -233,7 +230,7 @@ const PendingApprovalsTable = () => {
       
       {/* Warning Dialog */}
       {showWarning && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[9999]">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">
               {showWarning.action === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
@@ -261,10 +258,11 @@ const PendingApprovalsTable = () => {
           </div>
         </div>
       )}
+      
 
       {/* View Details Form */}
       {showDetailsForm && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[999]">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold">Purchase Order Details</h3>
@@ -342,7 +340,7 @@ const PendingApprovalsTable = () => {
             
             <div className="flex justify-end mt-6 space-x-3">
               <button 
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 z-[999]"
                 onClick={() => handleAction('decline', showDetailsForm.id)}
               >
                 Decline
@@ -361,7 +359,7 @@ const PendingApprovalsTable = () => {
       {/* View All Form */}
       {showAllForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full h-5/6 flex flex-col">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-6xl w-full h-5/6 flex flex-col relative">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold">All Pending Purchase Orders</h3>
               <button 
@@ -424,21 +422,25 @@ const PendingApprovalsTable = () => {
                           <button 
                             className="p-1 bg-green-100 text-green-600 rounded hover:bg-green-200" 
                             title="Approve"
-                            onClick={() => handleAction('approve', item.id)}
+                            onClick={() => {
+                              handleAction('approve', item.id);
+                            }}
                           >
                             <CheckCircle size={20} />
                           </button>
                           <button 
                             className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200" 
                             title="Decline"
-                            onClick={() => handleAction('decline', item.id)}
+                            onClick={() => {
+                              handleAction('decline', item.id)}}
                           >
                             <XCircle size={20} />
                           </button>
                           <button 
                             className="p-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200" 
                             title="View Details"
-                            onClick={() => handleViewDetails(item)}
+                            onClick={() =>{
+                              handleViewDetails(item)}}
                           >
                             <FileText size={20} />
                           </button>
