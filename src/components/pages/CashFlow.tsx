@@ -34,6 +34,8 @@ export default function CashFlowDashboard() {
   const [bankAccounts, setBankAccounts] = useState<BankAccountProps[]>(initialBankAccounts);
   const [transactions, setTransactions] = useState<TransactionProps[]>(initialTransactions);
   const [cashOnHand, setCashOnHand] = useState<number>(2450.75);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const totalBankBalance = bankAccounts.reduce((sum, account) => sum + account.balance, 0);
   const totalAssets = totalBankBalance + cashOnHand;
@@ -229,12 +231,56 @@ export default function CashFlowDashboard() {
                 ))}
               </div>
               <div className="mt-4">
-                <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">View all transactions</button>
+                <button
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  View all transactions
+                </button>
               </div>
             </div>
           </div>
         </div>
       </main>
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">All Transactions</h2>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold"
+            >
+              ×
+            </button>
+            <div className="max-h-[400px] overflow-y-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase">Date</th>
+                    <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase">Description</th>
+                    <th className="px-4 py-2 text-right text-xs font-bold text-gray-500 uppercase">Amount</th>
+                    <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase">Type</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {transactions.map((transaction) => (
+                    <tr key={transaction.id}>
+                      <td className="px-4 py-2 text-sm text-gray-600">
+                        {new Date(transaction.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-800">{transaction.description}</td>
+                      <td className={`px-4 py-2 text-sm text-right font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                        {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-600 capitalize">{transaction.type}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
