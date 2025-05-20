@@ -19,6 +19,11 @@ const dummyUsers = [
     password: "123",
     name: "Test User"
   },
+  { 
+    username: "rhandie", 
+    password: "rhandie",
+    name: "Rhandie C Matre Jr."
+  },
 ];
 
 export const AuthProvider = ({ children }) => {

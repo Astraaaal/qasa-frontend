@@ -63,7 +63,9 @@ const Home = () => {
         />
 
         {/* Pending Sales */}
-        <PendingSales pendingItems={pendingTransactions.sales} />
+        <PendingSales pendingItems={pendingTransactions.sales}
+        searchItem={postingSearchTerm}
+        setSearchItem={setPostingSearchTerm} />
 
         {/* Pending Purchases */}
         <PendingPurchases pendingItems={pendingTransactions.purchases} />
