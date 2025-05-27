@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react";
 import { FinancialSummaryKpiCardsProps } from "../../types/FinancialSummary";
+import { fetchDepartments } from "@/components/service/api/department"; // Import API to fetch departments
+import { useAuth } from "@/components/service/hooks/useAuth"; // Hook to get the token
 
 const KpiCard = ({
   title = "Revenue",
   value = "₱24,780",
   change = { value: "₱2,430", type: "increase", percentage: "12%" },
   period = "MTD",
+  icon = <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
   status = "green",
   description = "Monthly target",
 }: FinancialSummaryKpiCardsProps) => {
@@ -22,6 +25,7 @@ const KpiCard = ({
     <Card className="bg-white border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex items-center space-x-2">
+          {icon}
           <CardTitle className="text-sm font-bold text-foreground">{title}</CardTitle>
         </div>
         <span className="text-xs font-medium text-muted-foreground">{period}</span>
@@ -36,13 +40,6 @@ const KpiCard = ({
                   "ml-2 rounded-full px-2 py-0.5 text-xs font-medium border",
                   statusColors[status],
                 )}
-                aria-label={
-                  status === "green"
-                    ? "Low Risk"
-                    : status === "yellow"
-                    ? "Moderate Risk"
-                    : "High Risk"
-                }
               >
                 {status === "green"
                   ? "Low Risk"
@@ -77,54 +74,48 @@ const KpiCard = ({
   );
 };
 
-const KpiCards = ({ cards }: FinancialSummaryKpiCardsProps) => {
-  const defaultCards: FinancialSummaryKpiCardsProps[] = [
-    {
-      id: "1",
-      title: "Revenue",
-      value: "₱124,780",
-      change: { value: "₱12,430", type: "increase", percentage: "12%" },
-      period: "MTD",
-      description: "Monthly target: ₱150,000",
-    },
-    {
-      id: "2",
-      title: "Expenses",
-      value: "₱86,230",
-      change: { value: "₱5,230", type: "increase", percentage: "8%" },
-      period: "MTD",
-      description: "Monthly budget: ₱90,000",
-    },
-    {
-      id: "3",
-      title: "Profit",
-      value: "₱38,550",
-      change: { value: "₱7,200", type: "increase", percentage: "23%" },
-      period: "MTD",
-      description: "Monthly target: ₱45,000",
-    },
-    {
-      id: "4",
-      title: "Outstanding Payables",
-      value: "₱42,650",
-      period: "Current",
-      status: "yellow",
-      description: "31-60 days: moderate risk",
-    },
-    {
-      id: "5",
-      title: "Outstanding Receivables",
-      value: "₱78,320",
-      period: "Current",
-      status: "red",
-      description: "61-90 days: high risk",
-    },
-  ];
+const KpiCards = ({ cards }: { cards?: FinancialSummaryKpiCardsProps[] }) => {
+  const [departmentCards, setDepartmentCards] = useState<FinancialSummaryKpiCardsProps[]>([]);
+  const { token } = useAuth(); // Get token from context
 
-  const displayCards = cards || defaultCards;
+  useEffect(() => {
+    const loadDepartments = async () => {
+      if (!token) return; // Return if no token is available
+
+      try {
+        // Fetch departments using the token
+        const departments = await fetchDepartments(token);
+
+        // If no departments, set empty array
+        if (!departments || departments.length === 0) {
+          setDepartmentCards([]);
+          return;
+        }
+
+        // Map department data to the card format
+        const mapped = departments.map((dept: any, index: number) => ({
+          id: String(dept.mId), // Use mId for the department ID
+          title: dept.mName || `Department ${index + 1}`, // Use mName for department name
+          value: dept.mBudget ? `₱${dept.mBudget.toLocaleString()}` : "₱1", // Use mBudget for department budget
+          change: { value: "₱0", type: "increase", percentage: "0%" },
+          period: "MTD",
+          icon: <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
+          description: dept.mDescription || "No description", // Use mDescription for the description
+        }));
+
+        setDepartmentCards(mapped); // Set the mapped department cards to state
+      } catch (error) {
+        console.error("Error fetching departments:", error);
+      }
+    };
+
+    loadDepartments();
+  }, [token]); // Fetch departments whenever the token changes
+
+  const displayCards = cards || departmentCards; // Fallback to department cards if no cards are passed
 
   return (
-    <div className="w-full bg-[#F0F0F0] p-4 rounded-lg"> 
+    <div className="w-full bg-[#F0F0F0] p-4 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {displayCards.map((card, index) => (
           <KpiCard key={index} {...card} />
