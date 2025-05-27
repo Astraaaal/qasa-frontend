@@ -61,14 +61,21 @@ export const PendingApprovalsTable = () => {
     const [showDetailsForm, setShowDetailsForm] = useState<PurchaseOrder | null>(null);
     const [showAllForm, setShowAllForm] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>("");
+    const [showSuccess, setShowSuccess] = useState(null);
+
     
     const handleAction = (action: string, id: string) => {
       setShowWarning({ action, id });
     };
     
     const confirmAction = () => {
-      //logic here
       setShowWarning(null);
+      setShowSuccess({
+        message: showWarning.action === 'approve' 
+          ? `Purchase order ${showWarning.id} approved successfully.` 
+          : `Purchase order ${showWarning.id} declined successfully.`
+      });
+      setTimeout(() => setShowSuccess(null), 3000);
     };
     
     const cancelAction = () => {
@@ -149,9 +156,9 @@ export const PendingApprovalsTable = () => {
           </table>
         </div>
         
-        {/* Warning Dialog */}
+        {/* Warning & Success Dialog */}
         {showWarning && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[9999]">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
               <h3 className="text-xl font-bold mb-4">
                 {showWarning.action === 'approve' ? 'Confirm Approval' : 'Confirm Rejection'}
@@ -179,10 +186,25 @@ export const PendingApprovalsTable = () => {
             </div>
           </div>
         )}
+        {showSuccess && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[9999]">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center">
+              <h3 className="text-xl font-bold mb-4 text-green-600">Done</h3>
+              <p className="mb-6">{showSuccess.message}</p>
+              <button 
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                onClick={() => setShowSuccess(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
   
         {/* View Details Form */}
         {showDetailsForm && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[999]">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">Purchase Order Details</h3>
