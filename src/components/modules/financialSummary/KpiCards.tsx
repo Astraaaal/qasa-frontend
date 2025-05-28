@@ -1,3 +1,7 @@
+
+// SLICED THE DATA INTO 5 CARDS and THE 5 CARD WILL ONLY DISPLAY 
+
+
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { cn } from "@/lib/utils";
@@ -115,17 +119,151 @@ const KpiCards = ({ cards }: { cards?: FinancialSummaryKpiCardsProps[] }) => {
   const displayCards = cards || departmentCards; // Fallback to department cards if no cards are passed
 
   return (
-    <div className="w-full bg-[#F0F0F0] p-4 rounded-lg">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {displayCards.map((card, index) => (
-          <KpiCard key={index} {...card} />
-        ))}
-      </div>
+  <div className="w-full bg-[#F0F0F0] p-4 rounded-lg">
+    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {displayCards.slice(0, 5).map((card, index) => (
+        <KpiCard key={index} {...card} />
+      ))}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default KpiCards;
+
+
+
+// FETCHING ALL THE API DATA
+
+// import React, { useEffect, useState } from "react";
+// import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+// import { cn } from "@/lib/utils";
+// import { ArrowDownIcon, ArrowUpIcon, DollarSignIcon } from "lucide-react";
+// import { FinancialSummaryKpiCardsProps } from "../../types/FinancialSummary";
+// import { fetchDepartments } from "@/components/service/api/department"; // Import API to fetch departments
+// import { useAuth } from "@/components/service/hooks/useAuth"; // Hook to get the token
+
+// const KpiCard = ({
+//   title = "Revenue",
+//   value = "₱24,780",
+//   change = { value: "₱2,430", type: "increase", percentage: "12%" },
+//   period = "MTD",
+//   icon = <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
+//   status = "green",
+//   description = "Monthly target",
+// }: FinancialSummaryKpiCardsProps) => {
+//   const statusColors = {
+//     green: "bg-green-100 text-green-800 border-green-200",
+//     yellow: "bg-yellow-100 text-yellow-800 border-yellow-200",
+//     red: "bg-red-100 text-red-800 border-red-200",
+//   };
+
+//   return (
+//     <Card className="bg-white border shadow-sm">
+//       <CardHeader className="flex flex-row items-center justify-between pb-2">
+//         <div className="flex items-center space-x-2">
+//           {icon}
+//           <CardTitle className="text-sm font-bold text-foreground">{title}</CardTitle>
+//         </div>
+//         <span className="text-xs font-medium text-muted-foreground">{period}</span>
+//       </CardHeader>
+//       <CardContent>
+//         <div className="flex flex-col space-y-2">
+//           <div className="flex items-center">
+//             <span className="text-2xl font-bold text-gray-900">{value}</span>
+//             {status && (
+//               <span
+//                 className={cn(
+//                   "ml-2 rounded-full px-2 py-0.5 text-xs font-medium border",
+//                   statusColors[status],
+//                 )}
+//               >
+//                 {status === "green"
+//                   ? "Low Risk"
+//                   : status === "yellow"
+//                   ? "Moderate Risk"
+//                   : "High Risk"}
+//               </span>
+//             )}
+//           </div>
+
+//           {change && (
+//             <div className="flex items-center space-x-1">
+//               {change.type === "increase" ? (
+//                 <ArrowUpIcon className="h-4 w-4 text-green-500" />
+//               ) : (
+//                 <ArrowDownIcon className="h-4 w-4 text-red-500" />
+//               )}
+//               <span
+//                 className={`text-xs font-medium ${
+//                   change.type === "increase" ? "text-green-500" : "text-red-500"
+//                 }`}
+//               >
+//                 {change.value} ({change.percentage})
+//               </span>
+//             </div>
+//           )}
+
+//           <p className="text-xs text-muted-foreground">{description}</p>
+//         </div>
+//       </CardContent>
+//     </Card>
+//   );
+// };
+
+// const KpiCards = ({ cards }: { cards?: FinancialSummaryKpiCardsProps[] }) => {
+//   const [departmentCards, setDepartmentCards] = useState<FinancialSummaryKpiCardsProps[]>([]);
+//   const { token } = useAuth(); // Get token from context
+
+//   useEffect(() => {
+//     const loadDepartments = async () => {
+//       if (!token) return; // Return if no token is available
+
+//       try {
+//         // Fetch departments using the token
+//         const departments = await fetchDepartments(token);
+
+//         // If no departments, set empty array
+//         if (!departments || departments.length === 0) {
+//           setDepartmentCards([]);
+//           return;
+//         }
+
+//         // Map department data to the card format
+//         const mapped = departments.map((dept: any, index: number) => ({
+//           id: String(dept.mId), // Use mId for the department ID
+//           title: dept.mName || `Department ${index + 1}`, // Use mName for department name
+//           value: dept.mBudget ? `₱${dept.mBudget.toLocaleString()}` : "₱1", // Use mBudget for department budget
+//           change: { value: "₱0", type: "increase", percentage: "0%" },
+//           period: "MTD",
+//           icon: <DollarSignIcon className="h-4 w-4 text-muted-foreground" />,
+//           description: dept.mDescription || "No description", // Use mDescription for the description
+//         }));
+
+//         setDepartmentCards(mapped); // Set the mapped department cards to state
+//       } catch (error) {
+//         console.error("Error fetching departments:", error);
+//       }
+//     };
+
+//     loadDepartments();
+//   }, [token]); // Fetch departments whenever the token changes
+
+//   const displayCards = cards || departmentCards; // Fallback to department cards if no cards are passed
+
+//   return (
+//     <div className="w-full bg-[#F0F0F0] p-4 rounded-lg">
+//       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+//         {displayCards.map((card, index) => (
+//           <KpiCard key={index} {...card} />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default KpiCards;
 
 
 
