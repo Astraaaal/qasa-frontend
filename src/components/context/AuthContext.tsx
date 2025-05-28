@@ -129,20 +129,14 @@ export default AuthContext;
 
 
 
+// Dummy Account
 
-<<<<<<< HEAD
 // import React, { createContext, useState, useContext, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
-=======
-
-
-// import React, { createContext, useState, useContext, useEffect } from "react";
->>>>>>> origin/main
 
 // // Create the Auth Context
 // const AuthContext = createContext(null);
 
-<<<<<<< HEAD
 // // Custom hook to use the auth context
 // export const useAuth = () => useContext(AuthContext);
 
@@ -165,27 +159,16 @@ export default AuthContext;
 //   },
 // ];
 
-=======
-// export const useAuth = () => useContext(AuthContext);
-
->>>>>>> origin/main
 // export const AuthProvider = ({ children }) => {
 //     const [currentUser, setCurrentUser] = useState(null);
 //     const [loading, setLoading] = useState(true);
 //     const [authError, setAuthError] = useState("");
-<<<<<<< HEAD
     
 //     // Check if user is already logged in from localStorage
-=======
-//     // Ericson Added API Backend - Token state for API authentication
-//     const [token, setToken] = useState("");
-    
->>>>>>> origin/main
 //     useEffect(() => {
 //         const checkUserAuth = () => {
 //             const isLoggedIn = localStorage.getItem("loggedIn");
 //             const storedUser = localStorage.getItem("user");
-<<<<<<< HEAD
             
 //             if (isLoggedIn === "true" && storedUser) {
 //                 try {
@@ -195,22 +178,6 @@ export default AuthContext;
 //                     console.error("Error parsing user data:", error);
 //                     localStorage.removeItem("user");
 //                     localStorage.removeItem("loggedIn");
-=======
-//             // Ericson Added API Backend - Retrieve token from localStorage
-//             const storedToken = localStorage.getItem("token");
-            
-//             if (isLoggedIn === "true" && storedUser && storedToken) {
-//                 try {
-//                     const userData = JSON.parse(storedUser);
-//                     setCurrentUser(userData);
-//                     // Ericson Added API Backend - Set token from storage
-//                     setToken(storedToken);
-//                 } catch (error) {
-//                     localStorage.removeItem("user");
-//                     localStorage.removeItem("loggedIn");
-//                     // Ericson Added API Backend - Clear token on error
-//                     localStorage.removeItem("token");
->>>>>>> origin/main
 //                 }
 //             }
 //             setLoading(false);
@@ -219,7 +186,6 @@ export default AuthContext;
 //         checkUserAuth();
 //     }, []);
 
-<<<<<<< HEAD
 //     // Login function
 //     const login = (username, password) => {
 //         // Find user in our dummy database
@@ -263,83 +229,10 @@ export default AuthContext;
 //     // Check if user is authenticated
 //     const isAuthenticated = () => {
 //         return !!currentUser;
-=======
-//     // Ericson Added API Backend - Modified login function for API authentication
-//     const login = async (username, password) => {
-//         try {
-//             // Ericson Added API Backend - API endpoint
-//             const apiUrl = "http://26.45.117.162/test_api/api/token";
-            
-//             // Ericson Added API Backend - Request payload
-//             const postData = JSON.stringify({
-//                 mUsername: username,
-//                 mPassword: password
-//             });
-
-//             // Ericson Added API Backend - API call
-//             const response = await fetch(apiUrl, {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json'
-//                 },
-//                 body: postData
-//             });
-
-//             if (response.ok) {
-//                 const data = await response.json();
-                
-//                 // Ericson Added API Backend - Check for access token
-//                 if (data.access_token) {
-//                     const userData = {
-//                         username: username,
-//                         name: username
-//                     };
-                    
-//                     localStorage.setItem("loggedIn", "true");
-//                     localStorage.setItem("user", JSON.stringify(userData));
-//                     // Ericson Added API Backend - Store token
-//                     localStorage.setItem("token", data.access_token);
-                    
-//                     setCurrentUser(userData);
-//                     setToken(data.access_token);
-//                     setAuthError("");
-//                     return { success: true };
-//                 }
-//             }
-            
-//             // Ericson Added API Backend - Standard error message for failed login
-//             setAuthError("Invalid credentials. Please try again.");
-//             return { success: false };
-            
-//         } catch (error) {
-//             // Ericson Added API Backend - Consistent error message
-//             setAuthError("Invalid credentials. Please try again.");
-//             return { success: false };
-//         }
-//     };
-
-//     const logout = () => {
-//         localStorage.removeItem("loggedIn");
-//         localStorage.removeItem("user");
-//         // Ericson Added API Backend - Remove token on logout
-//         localStorage.removeItem("token");
-//         setCurrentUser(null);
-//         setToken("");
-//     };
-
-//     const isAuthenticated = () => {
-//         // Ericson Added API Backend - Check both user and token
-//         return !!currentUser && !!token;
->>>>>>> origin/main
 //     };
 
 //     const value = {
 //         currentUser,
-<<<<<<< HEAD
-=======
-//         // Ericson Added API Backend - Expose token
-//         token,
->>>>>>> origin/main
 //         login,
 //         logout,
 //         loading,
@@ -355,11 +248,3 @@ export default AuthContext;
 // };
 
 // export default AuthContext;
-
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main

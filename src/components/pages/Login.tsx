@@ -149,20 +149,14 @@ export default Login;
 
 
 
-<<<<<<< HEAD
 
+// Dummy Account
 
-=======
->>>>>>> origin/main
 // import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import { useAuth } from "../context/AuthContext";
 // import { Eye, EyeOff } from "lucide-react";
-<<<<<<< HEAD
 // import qasaLogo from '../assets/qASA-logo.png'; // Make sure this path is correct
-=======
-// import qasaLogo from '../assets/qASA-logo.png';
->>>>>>> origin/main
 
 // const Login = () => {
 //   const [username, setUsername] = useState("");
@@ -174,33 +168,20 @@ export default Login;
 //   const { login, currentUser, authError } = useAuth();
 //   const [showPassword, setShowPassword] = useState(false);
 
-<<<<<<< HEAD
 //   // If user is already logged in, redirect to dashboard
-=======
->>>>>>> origin/main
 //   useEffect(() => {
 //     if (currentUser) {
 //       navigate("/dashboard");
 //     }
 //   }, [currentUser, navigate]);
 
-<<<<<<< HEAD
 //   // Update local error state if auth context has an error
 //   useEffect(() => {
 //     if (authError) {
-=======
-//   useEffect(() => {
-//     if (authError) {
-//       // Ericson Added API Backend - Display API error message
->>>>>>> origin/main
 //       setError(authError);
 //     }
 //   }, [authError]);
 
-<<<<<<< HEAD
-=======
-//   // Ericson Added API Backend - Modified login handler for API
->>>>>>> origin/main
 //   const handleLogin = async (e) => {
 //     e.preventDefault();
     
@@ -213,7 +194,6 @@ export default Login;
 //     setError("");
 
 //     try {
-<<<<<<< HEAD
 //       const result = login(username, password);
       
 //       if (result.success) {
@@ -226,26 +206,12 @@ export default Login;
 //     } catch (err) {
 //       setError("An error occurred during login. Please try again.");
 //       console.error("Login error:", err);
-=======
-//       const result = await login(username, password);
-      
-//       if (result.success) {
-//         setSuccess(true);
-//         setTimeout(() => navigate("/dashboard"), 1500);
-//       }
-//     } catch (err) {
-//       // Ericson Added API Backend - Show standard error message
-//       setError("Invalid credentials. Please try again.");
->>>>>>> origin/main
 //     } finally {
 //       setIsLoading(false);
 //     }
 //   };
 
-<<<<<<< HEAD
 //   // Toggle password visibility
-=======
->>>>>>> origin/main
 //   const togglePasswordVisibility = () => {
 //     setShowPassword(!showPassword);
 //   };
@@ -253,10 +219,6 @@ export default Login;
 //   return (
 //     <div className="min-h-screen flex items-center justify-center bg-gray-50">
 //       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-<<<<<<< HEAD
-=======
-        
->>>>>>> origin/main
 
 //         <h3 className="text-xl font-semibold mb-6 text-center text-gray-700">
 //           Sign in to your qASA account
@@ -335,27 +297,15 @@ export default Login;
 //             {isLoading ? "Signing in..." : "Sign in"}
 //           </button>
 //         </form>
-<<<<<<< HEAD
 
 //         <div className="mt-6 text-center text-sm text-gray-500">
 //           <p>Demo accounts:</p>
 //           <p className="mt-1">Username: michael, Password: michael</p>
 //           <p className="mt-1">Username: 123, Password: 123</p>
 //         </div>
-=======
->>>>>>> origin/main
 //       </div>
 //     </div>
 //   );
 // };
 
-<<<<<<< HEAD
 // export default Login;
-=======
-// export default Login;
-
-
-
-
-
->>>>>>> origin/main
