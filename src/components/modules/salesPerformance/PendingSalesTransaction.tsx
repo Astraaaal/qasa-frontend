@@ -136,17 +136,12 @@ const PendingSalesTable: React.FC = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-gray-800">Department Budget Approvals</h3>
             <div className="flex space-x-2">
-              <button 
-                className="flex items-center text-blue-600 hover:text-blue-800 text-sm"
-                onClick={() => setShowAllForm(true)}
-              >
-                View All <ChevronRight size={16} />
-              </button>
+              
               <button 
                 className="px-4 py-2 text-sm font-bold text-white bg-blue-600 rounded hover:bg-blue-700"
                 onClick={() => setShowReportModal(true)}
               >
-                View Reports
+                View Sales Reports
               </button>
             </div>
           </div>
