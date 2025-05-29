@@ -41,7 +41,7 @@ const BudgetDistributionChart: React.FC = () => {
   // Transform department data for the pie chart
   const chartData = departments.map(dept => ({
     name: dept.mName || `Dept ${dept.mId}`,
-    value: dept.mBudget || 0
+    value: dept.mBudget || 10
   }));
 
   if (loading) {

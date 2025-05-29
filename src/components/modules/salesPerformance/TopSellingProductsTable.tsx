@@ -7,17 +7,19 @@ interface Department {
   mId: string;
   mName: string;
   mBudget: number;
-  mGrowth: number; // Percentage growth from previous period
+  mGrowth: number;
   mStatus: string;
   mDate: string;
 }
 
 const TopBudgetDepartmentsTable: React.FC = () => {
-  const [departments, setDepartments] = useState<Department[]>([]);
+  const [topDepartments, setTopDepartments] = useState<Department[]>([]);
+  const [allDepartments, setAllDepartments] = useState<Department[]>([]); // New state for all departments
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedDept, setSelectedDept] = useState<Department | null>(null);
   const [showAllModal, setShowAllModal] = useState(false);
+  const [loadingAll, setLoadingAll] = useState(false); // Loading state for all departments
   const { token } = useAuth();
 
   useEffect(() => {
@@ -27,27 +29,20 @@ const TopBudgetDepartmentsTable: React.FC = () => {
       try {
         setLoading(true);
         const data = await fetchDepartments(token);
-        // Set default values for budget and growth if they are not present
         const departmentsWithDefaults = (data || []).map(dept => ({
           ...dept,
-          mBudget: dept.mBudget || 1, // Set to 1 if mBudget is not defined or falsy
-          mGrowth: dept.mGrowth || 1  // Set to 1 if mGrowth is not defined or falsy
+          mBudget: dept.mBudget || 1,
+          mGrowth: dept.mGrowth || 1
         }));
-        // Sort by budget descending and take top 5
         const sortedDepts = departmentsWithDefaults
-
-//  const data = await fetchDepartments(token);
-//         // Sort by budget descending and take top 5
-//         const sortedDepts = (data || [])
-        
           .sort((a, b) => (b.mBudget || 0) - (a.mBudget || 0))
           .slice(0, 5);
-        setDepartments(sortedDepts);
+        setTopDepartments(sortedDepts);
         setError(null);
       } catch (err) {
         console.error("Error fetching departments:", err);
         setError("Failed to load department budgets");
-        setDepartments([]);
+        setTopDepartments([]);
       } finally {
         setLoading(false);
       }
@@ -64,8 +59,25 @@ const TopBudgetDepartmentsTable: React.FC = () => {
     setSelectedDept(null);
   };
 
-  const handleOpenAllModal = () => {
-    setShowAllModal(true);
+  const handleOpenAllModal = async () => {
+    try {
+      setLoadingAll(true);
+      const data = await fetchDepartments(token);
+      const departmentsWithDefaults = (data || []).map(dept => ({
+        ...dept,
+        mBudget: dept.mBudget || 1,
+        mGrowth: dept.mGrowth || 1
+      }));
+      const sortedDepts = departmentsWithDefaults
+        .sort((a, b) => (b.mBudget || 0) - (a.mBudget || 0));
+      setAllDepartments(sortedDepts);
+      setShowAllModal(true);
+    } catch (err) {
+      console.error("Error fetching all departments:", err);
+      setError("Failed to load all departments");
+    } finally {
+      setLoadingAll(false);
+    }
   };
 
   const handleCloseAllModal = () => {
@@ -105,7 +117,7 @@ const TopBudgetDepartmentsTable: React.FC = () => {
     );
   }
 
-  if (departments.length === 0) {
+  if (topDepartments.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
         <div className="p-6">
@@ -152,7 +164,7 @@ const TopBudgetDepartmentsTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {departments.map((dept) => (
+                {topDepartments.map((dept) => (
                   <tr key={dept.mId} className="hover:bg-gray-50">
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{dept.mName}</div>
@@ -220,7 +232,7 @@ const TopBudgetDepartmentsTable: React.FC = () => {
       {/* All Departments Modal */}
       {showAllModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 relative max-h-[90vh] flex flex-col">
             <button
               onClick={handleCloseAllModal}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
@@ -228,39 +240,57 @@ const TopBudgetDepartmentsTable: React.FC = () => {
               <X size={20} />
             </button>
             <h2 className="text-lg font-bold text-gray-800 mb-4">All Departments</h2>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr className="bg-gray-100 text-gray-600 text-left">
-                  <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Department</th>
-                  <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Budget</th>
-                  <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Growth</th>
-                  <th className="px-4 py-2 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {departments.map((dept) => (
-                  <tr key={dept.mId}>
-                    <td className="px-4 py-2 text-sm text-gray-700">{dept.mName}</td>
-                    <td className="px-4 py-2 text-sm text-gray-700">{formatCurrency(dept.mBudget)}</td>
-                    <td className={`px-4 py-2 text-sm ${dept.mGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {dept.mGrowth >= 0 ? <ArrowUp size={14} className="inline mr-1" /> : <ArrowDown size={14} className="inline mr-1" />}
-                      {Math.abs(dept.mGrowth)}%
-                    </td>
-                    <td className="px-4 py-2 text-sm text-gray-700">
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        dept.mStatus === 'Approved' 
-                          ? 'bg-green-100 text-green-800' 
-                          : dept.mStatus === 'Pending Approval' 
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                      }`}>
-                        {dept.mStatus}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            
+            {loadingAll ? (
+              <div className="flex justify-center items-center h-40">
+                <p>Loading all departments...</p>
+              </div>
+            ) : (
+              <div className="overflow-y-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-100 sticky top-0">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Department</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Budget</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Growth</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {allDepartments.map((dept) => (
+                      <tr key={dept.mId} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{dept.mName}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(dept.mBudget)}</td>
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm ${dept.mGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {dept.mGrowth >= 0 ? (
+                            <ArrowUp size={16} className="inline mr-1" />
+                          ) : (
+                            <ArrowDown size={16} className="inline mr-1" />
+                          )}
+                          {Math.abs(dept.mGrowth)}%
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-1 text-xs rounded-full ${
+                            dept.mStatus === 'Approved' 
+                              ? 'bg-green-100 text-green-800' 
+                              : dept.mStatus === 'Pending Approval' 
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800'
+                          }`}>
+                            {dept.mStatus}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="text-sm text-gray-600">
+                Showing {allDepartments.length} departments
+              </div>
+            </div>
           </div>
         </div>
       )}

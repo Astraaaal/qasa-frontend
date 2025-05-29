@@ -8,9 +8,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, CheckCircle, Clock } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { fetchDepartments } from "@/components/service/api/department"; // Correct import path
+import { fetchDepartments } from "@/components/service/api/department";
 import { useAuth } from "@/components/service/hooks/useAuth";
 
 interface Transaction {
@@ -23,50 +29,16 @@ interface Transaction {
 }
 
 interface PendingTransactionsProps {
-  transactions?: Transaction[];
   onApprove?: (id: string) => void;
   onView?: (id: string) => void;
 }
 
 const PendingTransactions = ({
-  transactions = [
-    {
-      id: "001",
-      title: "Supplier Payment - ABC Corp",
-      amount: 5280.75,
-      date: "2024-06-15",
-      priority: "high",
-      description: "Overdue payment for office supplies",
-    },
-    {
-      id: "002",
-      title: "Utility Bill - Electricity",
-      amount: 1250.0,
-      date: "2024-06-18",
-      priority: "medium",
-      description: "Monthly electricity bill payment",
-    },
-    {
-      id: "003",
-      title: "Staff Reimbursement - Michael Angelo Gonzales",
-      amount: 350.25,
-      date: "2024-06-20",
-      priority: "low",
-      description: "Travel expenses reimbursement",
-    },
-    {
-      id: "004",
-      title: "Travel Expense - Rhandie Matre",
-      amount: 9000.0,
-      date: "2025-05-22",
-      priority: "low",
-      description: "Travel expenses for client meeting",
-    },
-  ],
   onApprove = (id) => console.log(`Approved transaction ${id}`),
   onView = (id) => console.log(`Viewing transaction ${id}`),
 }: PendingTransactionsProps) => {
   const { token } = useAuth();
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [viewedTransaction, setViewedTransaction] = useState<Transaction | null>(null);
   const [showViewAll, setShowViewAll] = useState(false);
   const [approvingId, setApprovingId] = useState<string | null>(null);
@@ -83,6 +55,16 @@ const PendingTransactions = ({
         const data = await fetchDepartments(token);
         setDepartments(data);
         setErrorDepartments(null);
+
+        const mockTransactions: Transaction[] = data.map((dept: any, index: number) => ({
+          id: `TX-${index + 1}`,
+          title: `Pending Transaction - ${dept.mName}`,
+          amount: 1000 + index * 500,
+          date: new Date().toISOString().split("T")[0],
+          priority: index % 3 === 0 ? "high" : index % 3 === 1 ? "medium" : "low",
+          description: `Pending approval for ${dept.mName}`,
+        }));
+        setTransactions(mockTransactions);
       } catch (err) {
         console.error("Error fetching departments:", err);
         setErrorDepartments("Failed to load departments");
@@ -221,7 +203,6 @@ const PendingTransactions = ({
         </Button>
       </CardFooter>
 
-      {/* View Single Transaction Modal */}
       <Dialog open={!!viewedTransaction} onOpenChange={() => setViewedTransaction(null)}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -244,7 +225,6 @@ const PendingTransactions = ({
         </DialogContent>
       </Dialog>
 
-      {/* View All Transactions Modal */}
       <Dialog open={showViewAll} onOpenChange={setShowViewAll}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -272,30 +252,11 @@ const PendingTransactions = ({
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Display Departments */}
-      <div className="mt-6">
-        <h4 className="text-lg font-bold text-gray-800">Departments</h4>
-        {loadingDepartments ? (
-          <p>Loading departments...</p>
-        ) : errorDepartments ? (
-          <p className="text-red-500">{errorDepartments}</p>
-        ) : (
-          <ul>
-            {departments.map(department => (
-              <li key={department.mId} className="py-2">
-                {department.mName}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </Card>
   );
 };
 
 export default PendingTransactions;
-
 
 
 
