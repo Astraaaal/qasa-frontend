@@ -1,5 +1,3 @@
-
-
 export interface TransactionProps {
     id: number;
     date: string;

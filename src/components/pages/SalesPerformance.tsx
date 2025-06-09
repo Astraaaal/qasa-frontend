@@ -1,8 +1,9 @@
 import React from 'react';
-import MetricsSection from '../modules/salesPerformance/KpiSection';
-import ChartsSection from '../modules/salesPerformance/ChartSection';
-import TopSellingProductsTable from '../modules/salesPerformance/TopSellingProductsTable';
-import PendingSalesTable from '../modules/salesPerformance/PendingSalesTable';
+import SummaryCards from '../modules/salesPerformance/SummaryCards';
+import MonthlySalesChart from '../modules/salesPerformance/MonthlySalesChart';
+import ProductSalesDistributionChart from '../modules/salesPerformance/ProductSalesDistributionChart';
+import TopSellingProducts from '../modules/salesPerformance/TopSellingProductsTable';
+import PendingSalesTransaction from '../modules/salesPerformance/PendingSalesTransaction';
 import { 
   monthlySalesData, 
   productSalesData, 
@@ -27,13 +28,13 @@ const SalesPerformance = ({
       </div>
 
       <div className="container mx-auto px-1 py-5">
-        <MetricsSection />
-        <ChartsSection 
-          monthlySalesData={monthlySalesData}
-          productSalesData={productSalesData}
-        />
-        <TopSellingProductsTable products={topSellingProducts} />
-        <PendingSalesTable orders={pendingSalesOrders} />
+        <SummaryCards />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <MonthlySalesChart data={monthlySalesData} />
+          <ProductSalesDistributionChart data={productSalesData} />
+        </div>
+        <TopSellingProducts products={topSellingProducts} />
+        <PendingSalesTransaction orders={pendingSalesOrders} />
       </div>
     </div>
   );
