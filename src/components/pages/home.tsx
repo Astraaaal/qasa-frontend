@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
+  const [activeTab, setActiveTab] = useState("financial-summary");
+  const { accessToken, isAuthenticated, expiresIn } = useAuth();
+
+  useEffect(() => {
+    console.log("Login.tsx saw accessToken change:", accessToken);
+    console.log("am i auth'ed?", isAuthenticated);
+    console.log("Access Token (from useAuth):", accessToken);
+    console.log("Expiry (from useAuth):", expiresIn);
+  }, [accessToken, isAuthenticated, expiresIn]);
   const [activeTab, setActiveTab] = useState("financial-summary");
   const { accessToken, isAuthenticated, expiresIn } = useAuth();
 
@@ -16,7 +27,9 @@ const Home = () => {
     <div className="w-full h-full bg-[#F0F0F0] p-6 overflow-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#20476E]">dashboard</h1>
+        <h1 className="text-2xl font-bold text-[#20476E]">dashboard</h1>
         <p className="text-sm text-gray-600">
+          Manage your dashboard processes
           Manage your dashboard processes
         </p>
       </div>
@@ -74,3 +87,4 @@ const Home = () => {
 };
 
 export default Home;
+
