@@ -1,27 +1,23 @@
-import React, { useState } from 'react';
-import SummaryCard from '../modules/homeDashboard/SummaryCard';
-import PendingPosting from '../modules/homeDashboard/PendingPosting';
-import PendingSales from '../modules/homeDashboard/PendingSales';
-import PendingPurchases from '../modules/homeDashboard/PendingPurchases';
-import LowStockItems from '../modules/homeDashboard/LowStockItems';
-import { useTransactionData } from '../data/useTransactionData';
-import { useInventoryData } from '../data/useInventoryData';
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
-  // Get data from custom hooks
-  const { pendingTransactions, pendingPostingCount, pendingSalesCount, pendingPurchasesCount, 
-          pendingPostingTotal, pendingSalesTotal, pendingPurchasesTotal } = useTransactionData();
-  const { lowStockItems, lowStockCount } = useInventoryData();
+  const [activeTab, setActiveTab] = useState("financial-summary");
+  const { accessToken, isAuthenticated, expiresIn } = useAuth();
 
-  // Search state for pending posting items
-  const [postingSearchTerm, setPostingSearchTerm] = useState('');
+  useEffect(() => {
+    console.log("Login.tsx saw accessToken change:", accessToken);
+    console.log("am i auth'ed?", isAuthenticated);
+    console.log("Access Token (from useAuth):", accessToken);
+    console.log("Expiry (from useAuth):", expiresIn);
+  }, [accessToken, isAuthenticated, expiresIn]);
 
   return (
     <div className="w-full h-full bg-[#F0F0F0] p-6 overflow-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-blue-900">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-[#20476E]">dashboard</h1>
         <p className="text-sm text-gray-600">
-          Overview of pending transactions and inventory status
+          Manage your dashboard processes
         </p>
       </div>
 
